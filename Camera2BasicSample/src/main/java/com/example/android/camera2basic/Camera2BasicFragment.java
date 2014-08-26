@@ -18,8 +18,11 @@ package com.example.android.camera2basic;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.graphics.ImageFormat;
 import android.graphics.Matrix;
@@ -206,7 +209,7 @@ public class Camera2BasicFragment extends Fragment implements View.OnClickListen
      * Opens a {@link CameraDevice}. The result is listened by `mStateListener`.
      */
     private void openCamera() {
-        Activity activity = getActivity();
+        final Activity activity = getActivity();
         if (null == activity || activity.isFinishing() || mOpeningCamera) {
             return;
         }
@@ -236,6 +239,10 @@ public class Camera2BasicFragment extends Fragment implements View.OnClickListen
         } catch (CameraAccessException e) {
             Toast.makeText(activity, "Cannot access the camera.", Toast.LENGTH_SHORT).show();
             activity.finish();
+        } catch (NullPointerException e) {
+            // Currently an NPE is thrown when the Camera2API is used but not supported on the
+            // device this code runs.
+            new ErrorDialog().show(getFragmentManager(), "dialog");
         }
     }
 
@@ -497,6 +504,24 @@ public class Camera2BasicFragment extends Fragment implements View.OnClickListen
                 break;
             }
         }
+    }
+
+    public static class ErrorDialog extends DialogFragment {
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            final Activity activity = getActivity();
+            return new AlertDialog.Builder(activity)
+                    .setMessage("This device doesn't support Camera2 API.")
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            activity.finish();
+                        }
+                    })
+                    .create();
+        }
+
     }
 
 }
