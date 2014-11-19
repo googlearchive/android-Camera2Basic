@@ -22,7 +22,7 @@
     android:versionCode="1"
     android:versionName="1.0">
 
-    <uses-sdk android:minSdkVersion="L" android:targetSdkVersion="L" />
+    <!-- Min/target SDK versions (<uses-sdk>) managed by build.gradle -->
     <uses-permission android:name="android.permission.CAMERA" />
 
     <application android:allowBackup="true"

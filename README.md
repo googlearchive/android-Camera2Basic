@@ -1,16 +1,13 @@
 Android Camera2Basic Sample
 ==============================
 
-Introduction
-------------
-
-This sample demonstrates the basic use of Camera2 API. Check the source code to see how
-you can display camera preview and take pictures.
+This sample demonstrates the basic use of Camera2 API. Check the source code to see how you can
+display camera preview and take pictures.
 
 Pre-requisites
 --------------
 
-- Android SDK (L Preview)
+- Android SDK (L Developer Preview)
 - Android Build Tools v20
 - Android Support Repository
 

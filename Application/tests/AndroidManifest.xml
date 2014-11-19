@@ -39,9 +39,7 @@
           android:versionCode="1"
           android:versionName="1.0">
 
-    <uses-sdk
-            android:minSdkVersion="18"
-            android:targetSdkVersion="19" />
+    <!-- Min/target SDK versions (<uses-sdk>) managed by build.gradle -->
 
     <!-- We add an application tag here just so that we can indicate that
          this package needs to link against the android.test library,
