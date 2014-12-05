@@ -266,8 +266,10 @@ public class Camera2BasicFragment extends Fragment implements View.OnClickListen
                     int afState = result.get(CaptureResult.CONTROL_AF_STATE);
                     if (CaptureResult.CONTROL_AF_STATE_FOCUSED_LOCKED == afState ||
                             CaptureResult.CONTROL_AF_STATE_NOT_FOCUSED_LOCKED == afState) {
-                        int aeState = result.get(CaptureResult.CONTROL_AE_STATE);
-                        if (aeState == CaptureResult.CONTROL_AE_STATE_CONVERGED) {
+                        // CONTROL_AE_STATE can be null on some devices
+                        Integer aeState = result.get(CaptureResult.CONTROL_AE_STATE);
+                        if (aeState == null ||
+                                aeState == CaptureResult.CONTROL_AE_STATE_CONVERGED) {
                             mState = STATE_WAITING_NON_PRECAPTURE;
                             captureStillPicture();
                         } else {
@@ -277,17 +279,19 @@ public class Camera2BasicFragment extends Fragment implements View.OnClickListen
                     break;
                 }
                 case STATE_WAITING_PRECAPTURE: {
-                    int aeState = result.get(CaptureResult.CONTROL_AE_STATE);
-                    if (CaptureResult.CONTROL_AE_STATE_PRECAPTURE == aeState) {
-                        mState = STATE_WAITING_NON_PRECAPTURE;
-                    } else if (CaptureRequest.CONTROL_AE_STATE_FLASH_REQUIRED == aeState) {
+                    // CONTROL_AE_STATE can be null on some devices
+                    Integer aeState = result.get(CaptureResult.CONTROL_AE_STATE);
+                    if (aeState == null ||
+                            aeState == CaptureResult.CONTROL_AE_STATE_PRECAPTURE ||
+                            aeState == CaptureRequest.CONTROL_AE_STATE_FLASH_REQUIRED) {
                         mState = STATE_WAITING_NON_PRECAPTURE;
                     }
                     break;
                 }
                 case STATE_WAITING_NON_PRECAPTURE: {
-                    int aeState = result.get(CaptureResult.CONTROL_AE_STATE);
-                    if (CaptureResult.CONTROL_AE_STATE_PRECAPTURE != aeState) {
+                    // CONTROL_AE_STATE can be null on some devices
+                    Integer aeState = result.get(CaptureResult.CONTROL_AE_STATE);
+                    if (aeState == null || aeState != CaptureResult.CONTROL_AE_STATE_PRECAPTURE) {
                         mState = STATE_PICTURE_TAKEN;
                         captureStillPicture();
                     }
