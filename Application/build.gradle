@@ -14,13 +14,10 @@ repositories {
     jcenter()
 }
 
-
 dependencies {
-
     compile "com.android.support:support-v4:21.0.2"
     compile "com.android.support:support-v13:21.0.2"
     compile "com.android.support:cardview-v7:21.0.2"
-
 }
 
 // The sample build uses multiple directories to
@@ -33,7 +30,7 @@ List<String> dirs = [
 
 android {
     compileSdkVersion 21
-    buildToolsVersion "21.1.1"
+    buildToolsVersion "21.1.2"
 
     defaultConfig {
         minSdkVersion 21
