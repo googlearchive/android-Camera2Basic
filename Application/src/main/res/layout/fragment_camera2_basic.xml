@@ -25,12 +25,12 @@
         android:layout_alignParentTop="true" />
 
     <FrameLayout
+        android:id="@+id/control"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="112dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@id/texture"
-        android:background="#4285f4">
+        android:background="@color/control_background">
 
         <Button
             android:id="@+id/picture"
