@@ -18,7 +18,7 @@
 
     <!-- Activity themes -->
 
-    <style name="Theme.Base" parent="android:Theme.Light" />
+    <style name="Theme.Base" parent="@style/Theme.AppCompat.Light" />
 
     <style name="Theme.Sample" parent="Theme.Base" />
 
