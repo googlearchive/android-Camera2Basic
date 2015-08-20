@@ -42,7 +42,7 @@ when you are done.
 Pre-requisites
 --------------
 
-- Android SDK v21
+- Android SDK v23
 - Android Build Tools v23.0.0
 - Android Support Repository
 
