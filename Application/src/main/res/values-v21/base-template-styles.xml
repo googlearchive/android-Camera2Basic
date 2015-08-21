@@ -18,7 +18,7 @@
 <resources>
 
     <!-- Activity themes -->
-    <style name="Theme.Base" parent="@style/Theme.AppCompat.Light">
+    <style name="Theme.Base" parent="android:Theme.Material.Light">
     </style>
 
 </resources>
