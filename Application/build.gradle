@@ -19,6 +19,7 @@ dependencies {
     compile "com.android.support:support-v4:23.0.0"
     compile "com.android.support:support-v13:23.0.0"
     compile "com.android.support:cardview-v7:23.0.0"
+    compile 'com.android.support:appcompat-v7:23.0.0'
 }
 
 // The sample build uses multiple directories to
@@ -35,7 +36,7 @@ android {
 
     defaultConfig {
         minSdkVersion 21
-        targetSdkVersion 22
+        targetSdkVersion 23
     }
 
     compileOptions {
