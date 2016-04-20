@@ -276,6 +276,11 @@ public class Camera2BasicFragment extends Fragment
     private boolean mFlashSupported;
 
     /**
+     * Orientation of the camera sensor
+     */
+    private int mSensorOrientation;
+
+    /**
      * A {@link CameraCaptureSession.CaptureCallback} that handles events related to JPEG capture.
      */
     private CameraCaptureSession.CaptureCallback mCaptureCallback
@@ -515,19 +520,19 @@ public class Camera2BasicFragment extends Fragment
                 // Find out if we need to swap dimension to get the preview size relative to sensor
                 // coordinate.
                 int displayRotation = activity.getWindowManager().getDefaultDisplay().getRotation();
-                int sensorOrientation =
-                        characteristics.get(CameraCharacteristics.SENSOR_ORIENTATION);
+                //noinspection ConstantConditions
+                mSensorOrientation = characteristics.get(CameraCharacteristics.SENSOR_ORIENTATION);
                 boolean swappedDimensions = false;
                 switch (displayRotation) {
                     case Surface.ROTATION_0:
                     case Surface.ROTATION_180:
-                        if (sensorOrientation == 90 || sensorOrientation == 270) {
+                        if (mSensorOrientation == 90 || mSensorOrientation == 270) {
                             swappedDimensions = true;
                         }
                         break;
                     case Surface.ROTATION_90:
                     case Surface.ROTATION_270:
-                        if (sensorOrientation == 0 || sensorOrientation == 180) {
+                        if (mSensorOrientation == 0 || mSensorOrientation == 180) {
                             swappedDimensions = true;
                         }
                         break;
@@ -821,7 +826,7 @@ public class Camera2BasicFragment extends Fragment
 
             // Orientation
             int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
-            captureBuilder.set(CaptureRequest.JPEG_ORIENTATION, ORIENTATIONS.get(rotation));
+            captureBuilder.set(CaptureRequest.JPEG_ORIENTATION, getOrientation(rotation));
 
             CameraCaptureSession.CaptureCallback CaptureCallback
                     = new CameraCaptureSession.CaptureCallback() {
@@ -841,6 +846,20 @@ public class Camera2BasicFragment extends Fragment
         } catch (CameraAccessException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Retrieves the JPEG orientation from the specified screen rotation.
+     *
+     * @param rotation The screen rotation.
+     * @return The JPEG orientation (one of 0, 90, 270, and 360)
+     */
+    private int getOrientation(int rotation) {
+        // Sensor orientation is 90 for most devices, or 270 for some devices (eg. Nexus 5X)
+        // We have to take that into account and rotate JPEG properly.
+        // For devices with orientation of 90, we simply return our mapping from ORIENTATIONS.
+        // For devices with orientation of 270, we need to rotate the JPEG 180 degrees.
+        return (ORIENTATIONS.get(rotation) + mSensorOrientation + 270) % 360;
     }
 
     /**
