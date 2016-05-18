@@ -43,7 +43,7 @@ Pre-requisites
 --------------
 
 - Android SDK v23
-- Android Build Tools v24.0.0 rc3
+- Android Build Tools v23.0.3
 - Android Support Repository
 
 Screenshots
