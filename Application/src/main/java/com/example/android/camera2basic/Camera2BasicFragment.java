@@ -236,14 +236,14 @@ public class Camera2BasicFragment extends Fragment
 
     /**
      * This a callback object for the {@link ImageReader}. "onImageAvailable" will be called when a
-     * still image is ready to be saved.
+     * still image is ready to be saved. It's called at {@link #mBackgroundThread}.
      */
     private final ImageReader.OnImageAvailableListener mOnImageAvailableListener
             = new ImageReader.OnImageAvailableListener() {
 
         @Override
         public void onImageAvailable(ImageReader reader) {
-            mBackgroundHandler.post(new ImageSaver(reader.acquireNextImage(), mFile));
+            new ImageSaver(reader.acquireNextImage(), mFile).run();
         }
 
     };
