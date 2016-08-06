@@ -182,6 +182,18 @@ public class Camera2BasicFragment extends Fragment
     private Size mPreviewSize;
 
     /**
+     * Boolean to track whether more than one camera was found on this device
+     */
+    private boolean mMultipleCamerasFound = false;
+
+    /*
+     * Enumeration to track which camera we are currently using
+     */
+    enum WhichCamera {FRONT, BACK}
+    WhichCamera currentCameraId = WhichCamera.BACK;
+
+
+    /**
      * {@link CameraDevice.StateCallback} is called when {@link CameraDevice} changes its state.
      */
     private final CameraDevice.StateCallback mStateCallback = new CameraDevice.StateCallback() {
@@ -297,7 +309,8 @@ public class Camera2BasicFragment extends Fragment
                     if (afState == null) {
                         captureStillPicture();
                     } else if (CaptureResult.CONTROL_AF_STATE_FOCUSED_LOCKED == afState ||
-                            CaptureResult.CONTROL_AF_STATE_NOT_FOCUSED_LOCKED == afState) {
+                            CaptureResult.CONTROL_AF_STATE_NOT_FOCUSED_LOCKED == afState ||
+                            CaptureResult.CONTROL_AF_STATE_INACTIVE == afState) {
                         // CONTROL_AE_STATE can be null on some devices
                         Integer aeState = result.get(CaptureResult.CONTROL_AE_STATE);
                         if (aeState == null ||
@@ -426,7 +439,25 @@ public class Camera2BasicFragment extends Fragment
 
     @Override
     public void onViewCreated(final View view, Bundle savedInstanceState) {
+
+        // hide the camera swap button if there is 1 or fewer cameras
+        try {
+            Activity activity = getActivity();
+            CameraManager manager = (CameraManager) activity.getSystemService(Context.CAMERA_SERVICE);
+            String[] cameraList = manager.getCameraIdList();
+            if (cameraList.length > 1) {
+                mMultipleCamerasFound = true;
+            }
+        } catch (CameraAccessException err) {
+            // ignore
+        }
+
+        if (!mMultipleCamerasFound) {
+            view.findViewById(R.id.camera_flip_button).setVisibility(View.INVISIBLE);
+        }
+
         view.findViewById(R.id.picture).setOnClickListener(this);
+        view.findViewById(R.id.camera_flip_button).setOnClickListener(this);
         view.findViewById(R.id.info).setOnClickListener(this);
         mTextureView = (AutoFitTextureView) view.findViewById(R.id.texture);
     }
@@ -496,11 +527,19 @@ public class Camera2BasicFragment extends Fragment
                 CameraCharacteristics characteristics
                         = manager.getCameraCharacteristics(cameraId);
 
-                // We don't use a front facing camera in this sample.
                 Integer facing = characteristics.get(CameraCharacteristics.LENS_FACING);
-                if (facing != null && facing == CameraCharacteristics.LENS_FACING_FRONT) {
-                    continue;
+                if (currentCameraId == WhichCamera.BACK) {
+                    // We don't use a front facing camera in this sample.
+                    if (facing != null && facing == CameraCharacteristics.LENS_FACING_FRONT) {
+                        continue;
+                    }
+                } else if (currentCameraId == WhichCamera.FRONT) {
+                    // We don't use a back facing camera
+                    if (facing != null && facing == CameraCharacteristics.LENS_FACING_BACK) {
+                        continue;
+                    }
                 }
+
 
                 StreamConfigurationMap map = characteristics.get(
                         CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
@@ -888,6 +927,23 @@ public class Camera2BasicFragment extends Fragment
         switch (view.getId()) {
             case R.id.picture: {
                 takePicture();
+                break;
+            }
+            case R.id.camera_flip_button: {
+                if (currentCameraId == WhichCamera.FRONT) {
+                    currentCameraId = WhichCamera.BACK;
+                } else {
+                    currentCameraId = WhichCamera.FRONT;
+                }
+                if (mTextureView.isAvailable()) {
+
+                    stopBackgroundThread();
+                    closeCamera();
+
+                    startBackgroundThread();
+                    openCamera(mTextureView.getWidth(), mTextureView.getHeight());
+
+                }
                 break;
             }
             case R.id.info: {
