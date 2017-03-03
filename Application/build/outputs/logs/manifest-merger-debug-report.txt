@@ -1,0 +1,77 @@
+-- Merging decision tree log ---
+manifest
+ADDED from D:\AndroidStudioWorkspace\android-Camera2Basic\Application\src\main\AndroidManifest.xml:18:1-40:12
+	package
+		ADDED from D:\AndroidStudioWorkspace\android-Camera2Basic\Application\src\main\AndroidManifest.xml:19:5-47
+	xmlns:android
+		ADDED from D:\AndroidStudioWorkspace\android-Camera2Basic\Application\src\main\AndroidManifest.xml:18:11-69
+uses-permission#android.permission.CAMERA
+ADDED from D:\AndroidStudioWorkspace\android-Camera2Basic\Application\src\main\AndroidManifest.xml:21:5-65
+	android:name
+		ADDED from D:\AndroidStudioWorkspace\android-Camera2Basic\Application\src\main\AndroidManifest.xml:21:22-62
+uses-feature#android.hardware.camera
+ADDED from D:\AndroidStudioWorkspace\android-Camera2Basic\Application\src\main\AndroidManifest.xml:23:5-60
+	android:name
+		ADDED from D:\AndroidStudioWorkspace\android-Camera2Basic\Application\src\main\AndroidManifest.xml:23:19-57
+uses-feature#android.hardware.camera.autofocus
+ADDED from D:\AndroidStudioWorkspace\android-Camera2Basic\Application\src\main\AndroidManifest.xml:24:5-70
+	android:name
+		ADDED from D:\AndroidStudioWorkspace\android-Camera2Basic\Application\src\main\AndroidManifest.xml:24:19-67
+application
+ADDED from D:\AndroidStudioWorkspace\android-Camera2Basic\Application\src\main\AndroidManifest.xml:26:5-38:19
+MERGED from [com.android.support:support-v13:25.0.1] C:\Users\shreyash\.android\build-cache\910f4f3e38343027d0102707eacf26c40a370b2a\output\AndroidManifest.xml:25:5-20
+MERGED from [com.android.support:cardview-v7:25.0.1] C:\Users\shreyash\.android\build-cache\541047827b40d031e7793468b6c8f223553e3176\output\AndroidManifest.xml:22:5-20
+MERGED from [com.android.support:appcompat-v7:25.0.1] C:\Users\shreyash\.android\build-cache\05b7453a412a62bb81251d0c947b4c4c377ed4bf\output\AndroidManifest.xml:25:5-20
+MERGED from [com.android.support:support-v4:25.0.1] C:\Users\shreyash\.android\build-cache\2504779fb85241619340ffa6a8786b9c9aefa0b6\output\AndroidManifest.xml:25:5-20
+MERGED from [com.android.support:support-fragment:25.0.1] C:\Users\shreyash\.android\build-cache\c35887ce5b569944d53e6970e91588ff2fd7c989\output\AndroidManifest.xml:25:5-20
+MERGED from [com.android.support:support-media-compat:25.0.1] C:\Users\shreyash\.android\build-cache\62729bd128e08067890aeccb4049b205d88fc7fd\output\AndroidManifest.xml:25:5-20
+MERGED from [com.android.support:support-core-ui:25.0.1] C:\Users\shreyash\.android\build-cache\b7de678030e4cdb1100911d9ed36627d408c027f\output\AndroidManifest.xml:25:5-20
+MERGED from [com.android.support:support-core-utils:25.0.1] C:\Users\shreyash\.android\build-cache\95cf1481b598e0e5fcf4b53352aebb88d61ebfce\output\AndroidManifest.xml:25:5-20
+MERGED from [com.android.support:animated-vector-drawable:25.0.1] C:\Users\shreyash\.android\build-cache\9d0550e285bbc1c9215d18a7027a184bef0cfee4\output\AndroidManifest.xml:22:5-20
+MERGED from [com.android.support:support-vector-drawable:25.0.1] C:\Users\shreyash\.android\build-cache\e65ec6a633b1875a6b750641dd47ae8025f2fd85\output\AndroidManifest.xml:23:5-20
+MERGED from [com.android.support:support-compat:25.0.1] C:\Users\shreyash\.android\build-cache\6acb9d6fb5daa738a9959a3a7a784603b0c62035\output\AndroidManifest.xml:25:5-20
+	android:label
+		ADDED from D:\AndroidStudioWorkspace\android-Camera2Basic\Application\src\main\AndroidManifest.xml:27:9-41
+	android:allowBackup
+		ADDED from D:\AndroidStudioWorkspace\android-Camera2Basic\Application\src\main\AndroidManifest.xml:26:18-44
+	android:icon
+		ADDED from D:\AndroidStudioWorkspace\android-Camera2Basic\Application\src\main\AndroidManifest.xml:28:9-45
+	android:theme
+		ADDED from D:\AndroidStudioWorkspace\android-Camera2Basic\Application\src\main\AndroidManifest.xml:29:9-45
+activity#com.example.android.camera2basic.CameraActivity
+ADDED from D:\AndroidStudioWorkspace\android-Camera2Basic\Application\src\main\AndroidManifest.xml:31:9-37:20
+	android:label
+		ADDED from D:\AndroidStudioWorkspace\android-Camera2Basic\Application\src\main\AndroidManifest.xml:32:19-51
+	android:name
+		ADDED from D:\AndroidStudioWorkspace\android-Camera2Basic\Application\src\main\AndroidManifest.xml:31:19-49
+intent-filter#android.intent.action.MAIN+android.intent.category.LAUNCHER
+ADDED from D:\AndroidStudioWorkspace\android-Camera2Basic\Application\src\main\AndroidManifest.xml:33:13-36:29
+action#android.intent.action.MAIN
+ADDED from D:\AndroidStudioWorkspace\android-Camera2Basic\Application\src\main\AndroidManifest.xml:34:17-69
+	android:name
+		ADDED from D:\AndroidStudioWorkspace\android-Camera2Basic\Application\src\main\AndroidManifest.xml:34:25-66
+category#android.intent.category.LAUNCHER
+ADDED from D:\AndroidStudioWorkspace\android-Camera2Basic\Application\src\main\AndroidManifest.xml:35:17-77
+	android:name
+		ADDED from D:\AndroidStudioWorkspace\android-Camera2Basic\Application\src\main\AndroidManifest.xml:35:27-74
+uses-sdk
+INJECTED from D:\AndroidStudioWorkspace\android-Camera2Basic\Application\src\main\AndroidManifest.xml reason: use-sdk injection requested
+MERGED from [com.android.support:support-v13:25.0.1] C:\Users\shreyash\.android\build-cache\910f4f3e38343027d0102707eacf26c40a370b2a\output\AndroidManifest.xml:21:5-23:55
+MERGED from [com.android.support:cardview-v7:25.0.1] C:\Users\shreyash\.android\build-cache\541047827b40d031e7793468b6c8f223553e3176\output\AndroidManifest.xml:20:5-43
+MERGED from [com.android.support:appcompat-v7:25.0.1] C:\Users\shreyash\.android\build-cache\05b7453a412a62bb81251d0c947b4c4c377ed4bf\output\AndroidManifest.xml:21:5-23:78
+MERGED from [com.android.support:support-v4:25.0.1] C:\Users\shreyash\.android\build-cache\2504779fb85241619340ffa6a8786b9c9aefa0b6\output\AndroidManifest.xml:21:5-23:54
+MERGED from [com.android.support:support-fragment:25.0.1] C:\Users\shreyash\.android\build-cache\c35887ce5b569944d53e6970e91588ff2fd7c989\output\AndroidManifest.xml:21:5-23:60
+MERGED from [com.android.support:support-media-compat:25.0.1] C:\Users\shreyash\.android\build-cache\62729bd128e08067890aeccb4049b205d88fc7fd\output\AndroidManifest.xml:21:5-23:63
+MERGED from [com.android.support:support-core-ui:25.0.1] C:\Users\shreyash\.android\build-cache\b7de678030e4cdb1100911d9ed36627d408c027f\output\AndroidManifest.xml:21:5-23:58
+MERGED from [com.android.support:support-core-utils:25.0.1] C:\Users\shreyash\.android\build-cache\95cf1481b598e0e5fcf4b53352aebb88d61ebfce\output\AndroidManifest.xml:21:5-23:61
+MERGED from [com.android.support:animated-vector-drawable:25.0.1] C:\Users\shreyash\.android\build-cache\9d0550e285bbc1c9215d18a7027a184bef0cfee4\output\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-vector-drawable:25.0.1] C:\Users\shreyash\.android\build-cache\e65ec6a633b1875a6b750641dd47ae8025f2fd85\output\AndroidManifest.xml:21:5-43
+MERGED from [com.android.support:support-compat:25.0.1] C:\Users\shreyash\.android\build-cache\6acb9d6fb5daa738a9959a3a7a784603b0c62035\output\AndroidManifest.xml:21:5-23:58
+	tools:overrideLibrary
+		ADDED from [com.android.support:support-v13:25.0.1] C:\Users\shreyash\.android\build-cache\910f4f3e38343027d0102707eacf26c40a370b2a\output\AndroidManifest.xml:23:9-52
+	android:targetSdkVersion
+		INJECTED from D:\AndroidStudioWorkspace\android-Camera2Basic\Application\src\main\AndroidManifest.xml
+		INJECTED from D:\AndroidStudioWorkspace\android-Camera2Basic\Application\src\main\AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from D:\AndroidStudioWorkspace\android-Camera2Basic\Application\src\main\AndroidManifest.xml
+		INJECTED from D:\AndroidStudioWorkspace\android-Camera2Basic\Application\src\main\AndroidManifest.xml

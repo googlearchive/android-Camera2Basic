@@ -1,0 +1,4 @@
+#Fri Mar 03 12:09:29 IST 2017
+base.0=D\:\\AndroidStudioWorkspace\\android-Camera2Basic\\Application\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\1f\\main
+renamed.0=classes.dex
+file.0=D\:\\AndroidStudioWorkspace\\android-Camera2Basic\\Application\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\1f\\main\\classes.dex
