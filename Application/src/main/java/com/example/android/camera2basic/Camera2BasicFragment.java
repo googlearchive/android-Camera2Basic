@@ -773,17 +773,12 @@ public class Camera2BasicFragment extends Fragment
      * Lock the focus as the first step for a still image capture.
      */
     private void lockFocus() {
-        try {
-            // This is how to tell the camera to lock focus.
-            mPreviewRequestBuilder.set(CaptureRequest.CONTROL_AF_TRIGGER,
-                    CameraMetadata.CONTROL_AF_TRIGGER_START);
-            // Tell #mCaptureCallback to wait for the lock.
-            mState = STATE_WAITING_LOCK;
-            mCaptureSession.capture(mPreviewRequestBuilder.build(), mCaptureCallback,
-                    mBackgroundHandler);
-        } catch (CameraAccessException e) {
-            e.printStackTrace();
-        }
+        // This is how to tell the camera to lock focus.
+        mPreviewRequestBuilder.set(CaptureRequest.CONTROL_AF_TRIGGER,
+                CameraMetadata.CONTROL_AF_TRIGGER_START);
+        // Tell #mCaptureCallback to wait for the lock.
+        mState = STATE_WAITING_LOCK;
+        captureStillPicture();
     }
 
     /**
