@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "/Users/bartek/Documents/workspace/android/my-android-Camera2Basic/Application/build/intermediates/res/merged/debug/layout-v21/notification_action_tombstone.xml",
+        "source": "/Users/bartek/.android/build-cache/1fdb85ba545a50e3e8b2bc7629f746a6da934e80/output/res/layout-v21/notification_action_tombstone.xml"
+    },
+    {
+        "merged": "/Users/bartek/Documents/workspace/android/my-android-Camera2Basic/Application/build/intermediates/res/merged/debug/layout-v21/notification_template_icon_group.xml",
+        "source": "/Users/bartek/.android/build-cache/1fdb85ba545a50e3e8b2bc7629f746a6da934e80/output/res/layout-v21/notification_template_icon_group.xml"
+    },
+    {
+        "merged": "/Users/bartek/Documents/workspace/android/my-android-Camera2Basic/Application/build/intermediates/res/merged/debug/layout-v21/notification_action.xml",
+        "source": "/Users/bartek/.android/build-cache/1fdb85ba545a50e3e8b2bc7629f746a6da934e80/output/res/layout-v21/notification_action.xml"
+    },
+    {
+        "merged": "/Users/bartek/Documents/workspace/android/my-android-Camera2Basic/Application/build/intermediates/res/merged/debug/layout-v21/notification_template_custom_big.xml",
+        "source": "/Users/bartek/.android/build-cache/1fdb85ba545a50e3e8b2bc7629f746a6da934e80/output/res/layout-v21/notification_template_custom_big.xml"
+    }
+]
