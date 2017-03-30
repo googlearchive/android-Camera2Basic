@@ -147,6 +147,10 @@ public class Camera2BasicFragment extends Fragment
 
         @Override
         public boolean onSurfaceTextureDestroyed(SurfaceTexture texture) {
+            if (mTextureView != null) {
+                mTextureView.setSurfaceTextureListener(null);
+            }
+            
             return true;
         }
 
