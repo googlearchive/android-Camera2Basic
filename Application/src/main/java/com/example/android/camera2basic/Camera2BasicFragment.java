@@ -24,7 +24,6 @@ import android.app.DialogFragment;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.ImageFormat;
@@ -44,10 +43,7 @@ import android.hardware.camera2.TotalCaptureResult;
 import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.Image;
 import android.media.ImageReader;
-import android.media.MediaScannerConnection;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.support.annotation.NonNull;
@@ -438,7 +434,7 @@ public class Camera2BasicFragment extends Fragment
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mFile = new File(getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES), "pic.jpg");
+        mFile = new File(getActivity().getExternalFilesDir(null), "pic.jpg");
     }
 
     @Override
@@ -464,12 +460,11 @@ public class Camera2BasicFragment extends Fragment
         super.onPause();
     }
 
-    private void requestForPermission() {
+    private void requestCameraPermission() {
         if (FragmentCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
             new ConfirmationDialog().show(getChildFragmentManager(), FRAGMENT_DIALOG);
         } else {
-            FragmentCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.CAMERA},
+            FragmentCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA},
                     REQUEST_CAMERA_PERMISSION);
         }
     }
@@ -479,6 +474,7 @@ public class Camera2BasicFragment extends Fragment
                                            @NonNull int[] grantResults) {
         if (requestCode == REQUEST_CAMERA_PERMISSION) {
             if (grantResults.length != 1 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                // Not required this dialog to display, That cause Crashing issue
                 /*ErrorDialog.newInstance(getString(R.string.request_permission))
                         .show(getChildFragmentManager(), FRAGMENT_DIALOG);*/
             }
@@ -607,7 +603,7 @@ public class Camera2BasicFragment extends Fragment
     private void openCamera(int width, int height) {
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
-            requestForPermission();
+            requestCameraPermission();
             return;
         }
         setUpCameraOutputs(width, height);
