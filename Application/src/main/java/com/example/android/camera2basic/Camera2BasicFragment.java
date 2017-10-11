@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 The Android Open Source Project
+ * Copyright 2017 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +20,6 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
@@ -47,7 +45,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.support.annotation.NonNull;
-import android.support.v13.app.FragmentCompat;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.util.Size;
@@ -72,7 +72,7 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 public class Camera2BasicFragment extends Fragment
-        implements View.OnClickListener, FragmentCompat.OnRequestPermissionsResultCallback {
+        implements View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback {
 
     /**
      * Conversion from screen rotation to JPEG orientation.
@@ -461,11 +461,10 @@ public class Camera2BasicFragment extends Fragment
     }
 
     private void requestCameraPermission() {
-        if (FragmentCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
+        if (shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)) {
             new ConfirmationDialog().show(getChildFragmentManager(), FRAGMENT_DIALOG);
         } else {
-            FragmentCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA},
-                    REQUEST_CAMERA_PERMISSION);
+            requestPermissions(new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
         }
     }
 
@@ -488,6 +487,7 @@ public class Camera2BasicFragment extends Fragment
      * @param width  The width of available size for camera preview
      * @param height The height of available size for camera preview
      */
+    @SuppressWarnings("SuspiciousNameCombination")
     private void setUpCameraOutputs(int width, int height) {
         Activity activity = getActivity();
         CameraManager manager = (CameraManager) activity.getSystemService(Context.CAMERA_SERVICE);
@@ -842,6 +842,7 @@ public class Camera2BasicFragment extends Fragment
             };
 
             mCaptureSession.stopRepeating();
+            mCaptureSession.abortCaptures();
             mCaptureSession.capture(captureBuilder.build(), CaptureCallback, null);
         } catch (CameraAccessException e) {
             e.printStackTrace();
@@ -924,7 +925,7 @@ public class Camera2BasicFragment extends Fragment
          */
         private final File mFile;
 
-        public ImageSaver(Image image, File file) {
+        ImageSaver(Image image, File file) {
             mImage = image;
             mFile = file;
         }
@@ -983,6 +984,7 @@ public class Camera2BasicFragment extends Fragment
             return dialog;
         }
 
+        @NonNull
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             final Activity activity = getActivity();
@@ -1004,6 +1006,7 @@ public class Camera2BasicFragment extends Fragment
      */
     public static class ConfirmationDialog extends DialogFragment {
 
+        @NonNull
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             final Fragment parent = getParentFragment();
@@ -1012,8 +1015,7 @@ public class Camera2BasicFragment extends Fragment
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            FragmentCompat.requestPermissions(parent,
-                                    new String[]{Manifest.permission.CAMERA},
+                            parent.requestPermissions(new String[]{Manifest.permission.CAMERA},
                                     REQUEST_CAMERA_PERMISSION);
                         }
                     })
