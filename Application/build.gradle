@@ -1,11 +1,14 @@
 
 buildscript {
     repositories {
+        maven {
+            url 'https://maven.google.com'
+        }
         jcenter()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.3'
+        classpath 'com.android.tools.build:gradle:3.0.0'
     }
 }
 
@@ -19,10 +22,10 @@ repositories {
 }
 
 dependencies {
-    compile "com.android.support:support-v4:26.1.0"
-    compile "com.android.support:support-v13:26.1.0"
-    compile "com.android.support:cardview-v7:26.1.0"
-    compile "com.android.support:appcompat-v7:26.1.0"
+    compile "com.android.support:support-v4:27.0.0"
+    compile "com.android.support:support-v13:27.0.0"
+    compile "com.android.support:cardview-v7:27.0.0"
+    compile "com.android.support:appcompat-v7:27.0.0"
 }
 
 // The sample build uses multiple directories to
@@ -35,13 +38,13 @@ List<String> dirs = [
 
 android {
     
-        compileSdkVersion 26
+        compileSdkVersion 27
 
-    buildToolsVersion "26.0.1"
+    buildToolsVersion "26.0.2"
 
     defaultConfig {
         minSdkVersion 21
-        targetSdkVersion 26
+        targetSdkVersion 27
     }
 
     compileOptions {

@@ -1,6 +1,5 @@
-
-Android Camera2Basic Sample
-===================================
+Android Camera2Basic Sample (Kotlin)
+====================================
 
 This sample demonstrates how to use basic functionalities of Camera2
 API. You can learn how to iterate through characteristics of all the
@@ -42,14 +41,14 @@ when you are done.
 Pre-requisites
 --------------
 
-- Android SDK 27
-- Android Build Tools v26.0.2
+- Android SDK 25
+- Android Build Tools v25.0.3
 - Android Support Repository
 
 Screenshots
 -------------
 
-<img src="screenshots/main.png" height="400" alt="Screenshot"/> 
+<img src="screenshots/main.png" height="400" alt="Screenshot"/>
 
 Getting Started
 ---------------
