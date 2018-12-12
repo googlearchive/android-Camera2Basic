@@ -41,7 +41,7 @@ when you are done.
 Pre-requisites
 --------------
 
-- Android SDK 27
+- Android SDK 28
 - Android Support Repository
 
 Screenshots
