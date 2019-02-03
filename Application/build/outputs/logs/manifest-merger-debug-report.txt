@@ -1,0 +1,107 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml:18:1-43:12
+MERGED from [com.android.support:support-v13:27.0.2] /home/ethan/.gradle/caches/transforms-1/files-1.1/support-v13-27.0.2.aar/80093bac1b6bc96e69e09683b1728438/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-v4:27.0.2] /home/ethan/.gradle/caches/transforms-1/files-1.1/support-v4-27.0.2.aar/75af8ef23d2001b2a1bd6fe458820ff1/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:cardview-v7:27.0.2] /home/ethan/.gradle/caches/transforms-1/files-1.1/cardview-v7-27.0.2.aar/9b07a21d1868455f53e92c670b8a171a/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:appcompat-v7:27.0.2] /home/ethan/.gradle/caches/transforms-1/files-1.1/appcompat-v7-27.0.2.aar/d869a16fba16a7c41ca094e94693effe/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-media-compat:27.0.2] /home/ethan/.gradle/caches/transforms-1/files-1.1/support-media-compat-27.0.2.aar/b72d0128aadfc38716b7711ee1878a48/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-fragment:27.0.2] /home/ethan/.gradle/caches/transforms-1/files-1.1/support-fragment-27.0.2.aar/e7d19ff64bc138540f72d9423505a0b2/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-core-utils:27.0.2] /home/ethan/.gradle/caches/transforms-1/files-1.1/support-core-utils-27.0.2.aar/59c776ddbf9d80bca4151a6d522039d7/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:animated-vector-drawable:27.0.2] /home/ethan/.gradle/caches/transforms-1/files-1.1/animated-vector-drawable-27.0.2.aar/65963c899b4b669cc74c73a71f5b46a9/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-core-ui:27.0.2] /home/ethan/.gradle/caches/transforms-1/files-1.1/support-core-ui-27.0.2.aar/18bbdbc4fa8319005afad5ea3f8b8182/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-vector-drawable:27.0.2] /home/ethan/.gradle/caches/transforms-1/files-1.1/support-vector-drawable-27.0.2.aar/550b847317c820dbb72d123e73123c3e/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-compat:27.0.2] /home/ethan/.gradle/caches/transforms-1/files-1.1/support-compat-27.0.2.aar/5a9a28ff8a371e0b85922dadf42ceac3/AndroidManifest.xml:17:1-22:12
+MERGED from [android.arch.lifecycle:runtime:1.0.3] /home/ethan/.gradle/caches/transforms-1/files-1.1/runtime-1.0.3.aar/8b5d7d734e7cad02b56b3f32246047cb/AndroidManifest.xml:17:1-24:12
+	package
+		ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml:19:5-47
+	xmlns:android
+		ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml:18:11-69
+uses-permission#android.permission.CAMERA
+ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml:21:5-65
+	android:name
+		ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml:21:22-62
+uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
+ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml:22:5-81
+	android:name
+		ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml:22:22-78
+uses-permission#android.permission.ACCESS_FINE_LOCATION
+ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml:23:5-79
+	android:name
+		ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml:23:22-76
+uses-permission#android.permission.ACCESS_COARSE_LOCATION
+ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml:24:5-81
+	android:name
+		ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml:24:22-78
+uses-feature#android.hardware.camera
+ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml:26:5-60
+	android:name
+		ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml:26:19-57
+uses-feature#android.hardware.camera.autofocus
+ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml:27:5-70
+	android:name
+		ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml:27:19-67
+application
+ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml:29:5-41:19
+	android:label
+		ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml:30:9-41
+	android:icon
+		ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml:31:9-45
+	android:allowBackup
+		ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml:29:18-44
+	android:theme
+		ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml:32:9-45
+activity#com.example.android.camera2basic.CameraActivity
+ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml:34:9-40:20
+	android:label
+		ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml:35:19-51
+	android:name
+		ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml:34:19-49
+intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
+ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml:36:13-39:29
+action#android.intent.action.MAIN
+ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml:37:17-69
+	android:name
+		ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml:37:25-66
+category#android.intent.category.LAUNCHER
+ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml:38:17-77
+	android:name
+		ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml:38:27-74
+uses-sdk
+INJECTED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml
+INJECTED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml
+MERGED from [com.android.support:support-v13:27.0.2] /home/ethan/.gradle/caches/transforms-1/files-1.1/support-v13-27.0.2.aar/80093bac1b6bc96e69e09683b1728438/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-v13:27.0.2] /home/ethan/.gradle/caches/transforms-1/files-1.1/support-v13-27.0.2.aar/80093bac1b6bc96e69e09683b1728438/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-v4:27.0.2] /home/ethan/.gradle/caches/transforms-1/files-1.1/support-v4-27.0.2.aar/75af8ef23d2001b2a1bd6fe458820ff1/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-v4:27.0.2] /home/ethan/.gradle/caches/transforms-1/files-1.1/support-v4-27.0.2.aar/75af8ef23d2001b2a1bd6fe458820ff1/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:cardview-v7:27.0.2] /home/ethan/.gradle/caches/transforms-1/files-1.1/cardview-v7-27.0.2.aar/9b07a21d1868455f53e92c670b8a171a/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:cardview-v7:27.0.2] /home/ethan/.gradle/caches/transforms-1/files-1.1/cardview-v7-27.0.2.aar/9b07a21d1868455f53e92c670b8a171a/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:appcompat-v7:27.0.2] /home/ethan/.gradle/caches/transforms-1/files-1.1/appcompat-v7-27.0.2.aar/d869a16fba16a7c41ca094e94693effe/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:appcompat-v7:27.0.2] /home/ethan/.gradle/caches/transforms-1/files-1.1/appcompat-v7-27.0.2.aar/d869a16fba16a7c41ca094e94693effe/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-media-compat:27.0.2] /home/ethan/.gradle/caches/transforms-1/files-1.1/support-media-compat-27.0.2.aar/b72d0128aadfc38716b7711ee1878a48/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-media-compat:27.0.2] /home/ethan/.gradle/caches/transforms-1/files-1.1/support-media-compat-27.0.2.aar/b72d0128aadfc38716b7711ee1878a48/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-fragment:27.0.2] /home/ethan/.gradle/caches/transforms-1/files-1.1/support-fragment-27.0.2.aar/e7d19ff64bc138540f72d9423505a0b2/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-fragment:27.0.2] /home/ethan/.gradle/caches/transforms-1/files-1.1/support-fragment-27.0.2.aar/e7d19ff64bc138540f72d9423505a0b2/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-utils:27.0.2] /home/ethan/.gradle/caches/transforms-1/files-1.1/support-core-utils-27.0.2.aar/59c776ddbf9d80bca4151a6d522039d7/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-utils:27.0.2] /home/ethan/.gradle/caches/transforms-1/files-1.1/support-core-utils-27.0.2.aar/59c776ddbf9d80bca4151a6d522039d7/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:animated-vector-drawable:27.0.2] /home/ethan/.gradle/caches/transforms-1/files-1.1/animated-vector-drawable-27.0.2.aar/65963c899b4b669cc74c73a71f5b46a9/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:animated-vector-drawable:27.0.2] /home/ethan/.gradle/caches/transforms-1/files-1.1/animated-vector-drawable-27.0.2.aar/65963c899b4b669cc74c73a71f5b46a9/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-ui:27.0.2] /home/ethan/.gradle/caches/transforms-1/files-1.1/support-core-ui-27.0.2.aar/18bbdbc4fa8319005afad5ea3f8b8182/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-ui:27.0.2] /home/ethan/.gradle/caches/transforms-1/files-1.1/support-core-ui-27.0.2.aar/18bbdbc4fa8319005afad5ea3f8b8182/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-vector-drawable:27.0.2] /home/ethan/.gradle/caches/transforms-1/files-1.1/support-vector-drawable-27.0.2.aar/550b847317c820dbb72d123e73123c3e/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-vector-drawable:27.0.2] /home/ethan/.gradle/caches/transforms-1/files-1.1/support-vector-drawable-27.0.2.aar/550b847317c820dbb72d123e73123c3e/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-compat:27.0.2] /home/ethan/.gradle/caches/transforms-1/files-1.1/support-compat-27.0.2.aar/5a9a28ff8a371e0b85922dadf42ceac3/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-compat:27.0.2] /home/ethan/.gradle/caches/transforms-1/files-1.1/support-compat-27.0.2.aar/5a9a28ff8a371e0b85922dadf42ceac3/AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:runtime:1.0.3] /home/ethan/.gradle/caches/transforms-1/files-1.1/runtime-1.0.3.aar/8b5d7d734e7cad02b56b3f32246047cb/AndroidManifest.xml:20:5-22:41
+MERGED from [android.arch.lifecycle:runtime:1.0.3] /home/ethan/.gradle/caches/transforms-1/files-1.1/runtime-1.0.3.aar/8b5d7d734e7cad02b56b3f32246047cb/AndroidManifest.xml:20:5-22:41
+INJECTED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml
+INJECTED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml
+	android:targetSdkVersion
+		INJECTED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml
+		ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml
+		INJECTED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml
+		ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml
+		INJECTED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml

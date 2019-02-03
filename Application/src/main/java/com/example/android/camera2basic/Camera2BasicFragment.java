@@ -42,6 +42,7 @@ import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.Image;
 import android.media.ImageReader;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.support.annotation.NonNull;
@@ -79,6 +80,8 @@ public class Camera2BasicFragment extends Fragment
      */
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
     private static final int REQUEST_CAMERA_PERMISSION = 1;
+    private static final int REQUEST_STORAGE_PERMISSION = 1;
+    private static final int REQUEST_LOCATION_PERMISSION = 1;
     private static final String FRAGMENT_DIALOG = "dialog";
 
     static {
@@ -99,9 +102,9 @@ public class Camera2BasicFragment extends Fragment
     private static final int STATE_PREVIEW = 0;
 
     /**
-     * Camera state: Waiting for the focus to be locked.
+     * Camera state: Waiting to take photo.
      */
-    private static final int STATE_WAITING_LOCK = 1;
+    private static final int STATE_TAKE_PHOTO = 1;
 
     /**
      * Camera state: Waiting for the exposure to be precapture state.
@@ -230,9 +233,27 @@ public class Camera2BasicFragment extends Fragment
     private ImageReader mImageReader;
 
     /**
+     * This is the parent directory for all the files that this app will store.
+     */
+    private static final File mDirectory = new File(
+
+            Environment.getExternalStorageDirectory().getAbsolutePath(),
+            "DataCapture");
+
+    /**
+     * This is the directory for a specific capture
+     */
+    private File mSubDirectory;
+
+    /**
      * This is the output file for our picture.
      */
     private File mFile;
+
+    /**
+     * Time variable that notes the time the photo was taken at.
+     */
+    private int mTimeTaken;
 
     /**
      * This a callback object for the {@link ImageReader}. "onImageAvailable" will be called when a
@@ -276,6 +297,16 @@ public class Camera2BasicFragment extends Fragment
     private boolean mFlashSupported;
 
     /**
+     * Maximum exposure time of the sensor, in nanoseconds.
+     */
+    private long mSensorMaxExposure;
+
+    /**
+     * Maximum ISO value of the sensor
+     */
+    private int mSensorMaxSensitivity;
+
+    /**
      * Orientation of the camera sensor
      */
     private int mSensorOrientation;
@@ -292,22 +323,10 @@ public class Camera2BasicFragment extends Fragment
                     // We have nothing to do when the camera preview is working normally.
                     break;
                 }
-                case STATE_WAITING_LOCK: {
-                    Integer afState = result.get(CaptureResult.CONTROL_AF_STATE);
-                    if (afState == null) {
-                        captureStillPicture();
-                    } else if (CaptureResult.CONTROL_AF_STATE_FOCUSED_LOCKED == afState ||
-                            CaptureResult.CONTROL_AF_STATE_NOT_FOCUSED_LOCKED == afState) {
-                        // CONTROL_AE_STATE can be null on some devices
-                        Integer aeState = result.get(CaptureResult.CONTROL_AE_STATE);
-                        if (aeState == null ||
-                                aeState == CaptureResult.CONTROL_AE_STATE_CONVERGED) {
-                            mState = STATE_PICTURE_TAKEN;
-                            captureStillPicture();
-                        } else {
-                            runPrecaptureSequence();
-                        }
-                    }
+                case STATE_TAKE_PHOTO: {
+                    mTimeTaken = (int) (System.currentTimeMillis()/1000);
+
+                    captureStillPicture();
                     break;
                 }
                 case STATE_WAITING_PRECAPTURE: {
@@ -434,7 +453,9 @@ public class Camera2BasicFragment extends Fragment
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mFile = new File(getActivity().getExternalFilesDir(null), "pic.jpg");
+        if (!mDirectory.exists()) {
+            mDirectory.mkdir();
+        }
     }
 
     @Override
@@ -467,6 +488,24 @@ public class Camera2BasicFragment extends Fragment
             requestPermissions(new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
         }
     }
+
+    private void requestStoragePermission() {
+        if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            new ConfirmationDialog().show(getChildFragmentManager(), FRAGMENT_DIALOG);
+        } else {
+            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_STORAGE_PERMISSION);
+        }
+    }
+
+    private void requestLocationPermission() {
+        if (shouldShowRequestPermissionRationale(Manifest.permission.LOCATION_HARDWARE)) {
+            new ConfirmationDialog().show(getChildFragmentManager(), FRAGMENT_DIALOG);
+        } else {
+            requestPermissions(new String[]{Manifest.permission.CAMERA}, REQUEST_LOCATION_PERMISSION);
+        }
+    }
+
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
@@ -583,6 +622,12 @@ public class Camera2BasicFragment extends Fragment
                 Boolean available = characteristics.get(CameraCharacteristics.FLASH_INFO_AVAILABLE);
                 mFlashSupported = available == null ? false : available;
 
+                // Set the maximum exposure time
+                mSensorMaxExposure = characteristics.get(CameraCharacteristics.SENSOR_INFO_EXPOSURE_TIME_RANGE).getUpper();
+
+                // Set the maximum sensitivity
+                mSensorMaxSensitivity = characteristics.get(CameraCharacteristics.SENSOR_INFO_SENSITIVITY_RANGE).getUpper();
+
                 mCameraId = cameraId;
                 return;
             }
@@ -596,6 +641,18 @@ public class Camera2BasicFragment extends Fragment
         }
     }
 
+    private void setOutputNames() {
+        mTimeTaken = (int) (System.currentTimeMillis()/1000);
+        if (!mDirectory.exists()) {
+            mDirectory.mkdir();
+        }
+        mSubDirectory = new File(mDirectory, Integer.toString(mTimeTaken));
+        if (!mSubDirectory.exists()) {
+            mSubDirectory.mkdir();
+        }
+        mFile = new File(mSubDirectory, Integer.toString(mTimeTaken)+".jpg");
+    }
+
     /**
      * Opens the camera specified by {@link Camera2BasicFragment#mCameraId}.
      */
@@ -603,6 +660,9 @@ public class Camera2BasicFragment extends Fragment
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
             requestCameraPermission();
+            requestLocationPermission();
+            requestStoragePermission();
+
             return;
         }
         setUpCameraOutputs(width, height);
@@ -702,11 +762,8 @@ public class Camera2BasicFragment extends Fragment
                             // When the session is ready, we start displaying the preview.
                             mCaptureSession = cameraCaptureSession;
                             try {
-                                // Auto focus should be continuous for camera preview.
-                                mPreviewRequestBuilder.set(CaptureRequest.CONTROL_AF_MODE,
-                                        CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE);
-                                // Flash is automatically enabled when necessary.
-                                setAutoFlash(mPreviewRequestBuilder);
+                                // Set the parameters for the preview
+                                setPreviewParameters(mPreviewRequestBuilder);
 
                                 // Finally, we start displaying the camera preview.
                                 mPreviewRequest = mPreviewRequestBuilder.build();
@@ -778,7 +835,7 @@ public class Camera2BasicFragment extends Fragment
             mPreviewRequestBuilder.set(CaptureRequest.CONTROL_AF_TRIGGER,
                     CameraMetadata.CONTROL_AF_TRIGGER_START);
             // Tell #mCaptureCallback to wait for the lock.
-            mState = STATE_WAITING_LOCK;
+            mState = STATE_TAKE_PHOTO;
             mCaptureSession.capture(mPreviewRequestBuilder.build(), mCaptureCallback,
                     mBackgroundHandler);
         } catch (CameraAccessException e) {
@@ -792,9 +849,7 @@ public class Camera2BasicFragment extends Fragment
      */
     private void runPrecaptureSequence() {
         try {
-            // This is how to tell the camera to trigger.
-            mPreviewRequestBuilder.set(CaptureRequest.CONTROL_AE_PRECAPTURE_TRIGGER,
-                    CaptureRequest.CONTROL_AE_PRECAPTURE_TRIGGER_START);
+
             // Tell #mCaptureCallback to wait for the precapture sequence to be set.
             mState = STATE_WAITING_PRECAPTURE;
             mCaptureSession.capture(mPreviewRequestBuilder.build(), mCaptureCallback,
@@ -816,13 +871,9 @@ public class Camera2BasicFragment extends Fragment
             }
             // This is the CaptureRequest.Builder that we use to take a picture.
             final CaptureRequest.Builder captureBuilder =
-                    mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_STILL_CAPTURE);
+                    mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_MANUAL);
+            setCaptureParameters(captureBuilder);
             captureBuilder.addTarget(mImageReader.getSurface());
-
-            // Use the same AE and AF modes as the preview.
-            captureBuilder.set(CaptureRequest.CONTROL_AF_MODE,
-                    CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE);
-            setAutoFlash(captureBuilder);
 
             // Orientation
             int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
@@ -840,7 +891,6 @@ public class Camera2BasicFragment extends Fragment
                     unlockFocus();
                 }
             };
-
             mCaptureSession.stopRepeating();
             mCaptureSession.abortCaptures();
             mCaptureSession.capture(captureBuilder.build(), CaptureCallback, null);
@@ -888,6 +938,7 @@ public class Camera2BasicFragment extends Fragment
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.picture: {
+                setOutputNames();
                 takePicture();
                 break;
             }
@@ -908,6 +959,25 @@ public class Camera2BasicFragment extends Fragment
         if (mFlashSupported) {
             requestBuilder.set(CaptureRequest.CONTROL_AE_MODE,
                     CaptureRequest.CONTROL_AE_MODE_ON_AUTO_FLASH);
+        }
+    }
+
+    private void setPreviewParameters(CaptureRequest.Builder requestBuilder) {
+        requestBuilder.set(CaptureRequest.CONTROL_MODE,CaptureRequest.CONTROL_MODE_OFF);
+//        requestBuilder.set(CaptureRequest.SENSOR_EXPOSURE_TIME,mSensorMaxExposure);
+        requestBuilder.set(CaptureRequest.SENSOR_SENSITIVITY,mSensorMaxSensitivity);
+        if (mFlashSupported) {
+            requestBuilder.set(CaptureRequest.FLASH_MODE, CaptureRequest.FLASH_MODE_OFF);
+        }
+    }
+
+    private void setCaptureParameters(CaptureRequest.Builder requestBuilder) {
+        requestBuilder.set(CaptureRequest.CONTROL_MODE,CaptureRequest.CONTROL_MODE_OFF);
+        requestBuilder.set(CaptureRequest.SENSOR_EXPOSURE_TIME,mSensorMaxExposure);
+        requestBuilder.set(CaptureRequest.SENSOR_SENSITIVITY,mSensorMaxSensitivity);
+        requestBuilder.set(CaptureRequest.LENS_FOCUS_DISTANCE, 0.0f);
+        if (mFlashSupported) {
+            requestBuilder.set(CaptureRequest.FLASH_MODE, CaptureRequest.FLASH_MODE_OFF);
         }
     }
 
