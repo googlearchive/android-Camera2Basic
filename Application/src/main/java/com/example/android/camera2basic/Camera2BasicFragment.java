@@ -29,6 +29,10 @@ import android.graphics.Matrix;
 import android.graphics.Point;
 import android.graphics.RectF;
 import android.graphics.SurfaceTexture;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCaptureSession;
 import android.hardware.camera2.CameraCharacteristics;
@@ -39,6 +43,9 @@ import android.hardware.camera2.CaptureRequest;
 import android.hardware.camera2.CaptureResult;
 import android.hardware.camera2.TotalCaptureResult;
 import android.hardware.camera2.params.StreamConfigurationMap;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.media.Image;
 import android.media.ImageReader;
 import android.os.Bundle;
@@ -61,6 +68,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -73,7 +81,7 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 public class Camera2BasicFragment extends Fragment
-        implements View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback {
+        implements View.OnClickListener, SensorEventListener, LocationListener, ActivityCompat.OnRequestPermissionsResultCallback {
 
     /**
      * Conversion from screen rotation to JPEG orientation.
@@ -83,6 +91,11 @@ public class Camera2BasicFragment extends Fragment
     private static final int REQUEST_STORAGE_PERMISSION = 1;
     private static final int REQUEST_LOCATION_PERMISSION = 1;
     private static final String FRAGMENT_DIALOG = "dialog";
+    private static final int NUMSAMPLES = 100;
+
+    private SensorManager mSensorManager;
+    private Sensor mAccelerometer;
+    protected LocationManager mLocationManager;
 
     static {
         ORIENTATIONS.append(Surface.ROTATION_0, 90);
@@ -158,6 +171,10 @@ public class Camera2BasicFragment extends Fragment
         }
 
     };
+    /**
+     * string builder to build up the information for the text file.
+     */
+    private StringBuilder mTextData = new StringBuilder();
 
     /**
      * ID of the current {@link CameraDevice}.
@@ -256,6 +273,11 @@ public class Camera2BasicFragment extends Fragment
     private int mTimeTaken;
 
     /**
+     * Counter variable to count number of lines written
+     */
+    private int mCount;
+
+    /**
      * This a callback object for the {@link ImageReader}. "onImageAvailable" will be called when a
      * still image is ready to be saved.
      */
@@ -310,6 +332,16 @@ public class Camera2BasicFragment extends Fragment
      * Orientation of the camera sensor
      */
     private int mSensorOrientation;
+
+    /**
+     * variables to store the x, y and z axis accelerometer data in
+     */
+    private float mXAxis, mYAxis, mZAxis;
+
+    /**
+     * variable to store the lat and lon
+     */
+    private double mLat, mLon;
 
     /**
      * A {@link CameraCaptureSession.CaptureCallback} that handles events related to JPEG capture.
@@ -476,6 +508,7 @@ public class Camera2BasicFragment extends Fragment
     public void onPause() {
         closeCamera();
         stopBackgroundThread();
+        stopTakingData();
         super.onPause();
     }
 
@@ -663,6 +696,10 @@ public class Camera2BasicFragment extends Fragment
 
             return;
         }
+        mSensorManager = (SensorManager)getActivity().getSystemService(Context.SENSOR_SERVICE);
+        mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        mLocationManager = (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
+        mTextData = new StringBuilder();
         setUpCameraOutputs(width, height);
         configureTransform(width, height);
         Activity activity = getActivity();
@@ -824,6 +861,50 @@ public class Camera2BasicFragment extends Fragment
         lockFocus();
     }
 
+    private void takeData() {
+        mSensorManager.registerListener(this, mAccelerometer,SensorManager.SENSOR_DELAY_FASTEST);
+        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+    }
+
+    private void stopTakingData() {
+        mSensorManager.unregisterListener(this);
+        mLocationManager.removeUpdates(this);
+        mCount=0;
+        writeTextFile();
+    }
+
+    private void writeTextFile() {
+        File textFile = new File(mSubDirectory,"ACCELDATA.txt");
+        try {
+            FileOutputStream stream = new FileOutputStream(textFile);
+            try {
+                stream.write(mTextData.toString().getBytes());
+            } finally {
+                stream.close();
+                Toast toast = Toast.makeText(getActivity().getApplicationContext(),
+                        mTextData.toString(),
+                        Toast.LENGTH_SHORT);
+                toast.show();
+            }
+        }catch(FileNotFoundException e) {
+            Toast toast = Toast.makeText(getActivity().getApplicationContext(),
+                    e.toString(),
+                    Toast.LENGTH_SHORT);
+
+            toast.show();
+            Log.d("DataCapture", "failed to create directory");
+        }
+        catch (Exception e){
+            Toast toast = Toast.makeText(getActivity().getApplicationContext(),
+                    e.toString(),
+                    Toast.LENGTH_SHORT);
+
+            toast.show();
+            Log.d("DataCapture", "ERROR: I/O?");
+        }
+        mTextData = new StringBuilder();
+    }
+
     /**
      * Lock the focus as the first step for a still image capture.
      */
@@ -938,6 +1019,7 @@ public class Camera2BasicFragment extends Fragment
             case R.id.picture: {
                 setOutputNames();
                 takePicture();
+                takeData();
                 break;
             }
             case R.id.info: {
@@ -977,6 +1059,49 @@ public class Camera2BasicFragment extends Fragment
         if (mFlashSupported) {
             requestBuilder.set(CaptureRequest.FLASH_MODE, CaptureRequest.FLASH_MODE_OFF);
         }
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        Sensor mySensor = event.sensor;
+        if (mySensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+            mXAxis = event.values[0];
+            mYAxis = event.values[1];
+            mZAxis = event.values[2];
+            mTextData.append(String.format("%.5g", mXAxis) + " "
+                    + String.format("%.5g", mYAxis) + " " + String.format("%.5g", mZAxis) + " "
+                    + mLat + " " + mLon + "\r\n");
+            mCount++;
+            //Check to see if we need to turn off the logging
+            if (mCount==NUMSAMPLES) {
+                stopTakingData();
+            }
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        mLat = location.getLatitude();
+        mLon = location.getLongitude();
+    }
+
+    @Override
+    public void onProviderEnabled(String s) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String s) {
+
+    }
+
+    @Override
+    public void onStatusChanged(String s, int i, Bundle bundle) {
+
     }
 
     /**
