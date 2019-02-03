@@ -324,8 +324,6 @@ public class Camera2BasicFragment extends Fragment
                     break;
                 }
                 case STATE_TAKE_PHOTO: {
-                    mTimeTaken = (int) (System.currentTimeMillis()/1000);
-
                     captureStillPicture();
                     break;
                 }
