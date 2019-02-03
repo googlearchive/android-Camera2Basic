@@ -67,9 +67,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -91,7 +93,8 @@ public class Camera2BasicFragment extends Fragment
     private static final int REQUEST_STORAGE_PERMISSION = 1;
     private static final int REQUEST_LOCATION_PERMISSION = 1;
     private static final String FRAGMENT_DIALOG = "dialog";
-    private static final int NUMSAMPLES = 100;
+    private static final int NUM_SAMPLES = 1000;
+    private static final int DELAY_TIME = 10;
 
     private SensorManager mSensorManager;
     private Sensor mAccelerometer;
@@ -175,6 +178,11 @@ public class Camera2BasicFragment extends Fragment
      * string builder to build up the information for the text file.
      */
     private StringBuilder mTextData = new StringBuilder();
+
+    /**
+     * Output buffer for text file
+     */
+    private BufferedWriter mTextWriter = null;
 
     /**
      * ID of the current {@link CameraDevice}.
@@ -862,6 +870,15 @@ public class Camera2BasicFragment extends Fragment
     }
 
     private void takeData() {
+        File textFile = new File(mSubDirectory,"ACCELDATA.txt");
+        try {
+            mTextWriter = new BufferedWriter(new FileWriter(textFile));
+        } catch (IOException e) {
+            Toast toast = Toast.makeText(getActivity().getApplicationContext(),
+                    e.toString(),
+                    Toast.LENGTH_SHORT);
+            toast.show();
+        }
         mSensorManager.registerListener(this, mAccelerometer,SensorManager.SENSOR_DELAY_FASTEST);
         mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
     }
@@ -870,40 +887,49 @@ public class Camera2BasicFragment extends Fragment
         mSensorManager.unregisterListener(this);
         mLocationManager.removeUpdates(this);
         mCount=0;
-        writeTextFile();
-    }
-
-    private void writeTextFile() {
-        File textFile = new File(mSubDirectory,"ACCELDATA.txt");
         try {
-            FileOutputStream stream = new FileOutputStream(textFile);
-            try {
-                stream.write(mTextData.toString().getBytes());
-            } finally {
-                stream.close();
-                Toast toast = Toast.makeText(getActivity().getApplicationContext(),
-                        mTextData.toString(),
-                        Toast.LENGTH_SHORT);
-                toast.show();
-            }
-        }catch(FileNotFoundException e) {
+            mTextWriter.close();
+        } catch(IOException e) {
             Toast toast = Toast.makeText(getActivity().getApplicationContext(),
                     e.toString(),
                     Toast.LENGTH_SHORT);
-
             toast.show();
-            Log.d("DataCapture", "failed to create directory");
         }
-        catch (Exception e){
-            Toast toast = Toast.makeText(getActivity().getApplicationContext(),
-                    e.toString(),
-                    Toast.LENGTH_SHORT);
-
-            toast.show();
-            Log.d("DataCapture", "ERROR: I/O?");
-        }
-        mTextData = new StringBuilder();
+//        writeTextFile();
     }
+
+//    private void writeTextFile() {
+//
+//        byte[] textData = mTextData.toString().getBytes();
+//        try {
+//            FileOutputStream stream = new FileOutputStream(textFile);
+//            try {
+//                stream.write(textData);
+//                Toast toast = Toast.makeText(getActivity().getApplicationContext(),
+//                        mTextData.toString(),
+//                        Toast.LENGTH_SHORT);
+//                toast.show();
+//            } finally {
+//                stream.close();
+//            }
+//        }catch(FileNotFoundException e) {
+//            Toast toast = Toast.makeText(getActivity().getApplicationContext(),
+//                    e.toString(),
+//                    Toast.LENGTH_SHORT);
+//
+//            toast.show();
+//            Log.d("DataCapture", "failed to create directory");
+//        }
+//        catch (Exception e){
+//            Toast toast = Toast.makeText(getActivity().getApplicationContext(),
+//                    e.toString(),
+//                    Toast.LENGTH_SHORT);
+//
+//            toast.show();
+//            Log.d("DataCapture", "ERROR: I/O?");
+//        }
+//        mTextData = new StringBuilder();
+//    }
 
     /**
      * Lock the focus as the first step for a still image capture.
@@ -1017,9 +1043,15 @@ public class Camera2BasicFragment extends Fragment
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.picture: {
-                setOutputNames();
-                takePicture();
-                takeData();
+                Handler timerHandler = new Handler();
+                timerHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        setOutputNames();
+                        takePicture();
+                        takeData();
+                    }
+                },DELAY_TIME*1000);
                 break;
             }
             case R.id.info: {
@@ -1068,12 +1100,23 @@ public class Camera2BasicFragment extends Fragment
             mXAxis = event.values[0];
             mYAxis = event.values[1];
             mZAxis = event.values[2];
-            mTextData.append(String.format("%.5g", mXAxis) + " "
-                    + String.format("%.5g", mYAxis) + " " + String.format("%.5g", mZAxis) + " "
-                    + mLat + " " + mLon + "\r\n");
+//            mTextData.append(String.format("%.5g", mXAxis) + " "
+//                    + String.format("%.5g", mYAxis) + " " + String.format("%.5g", mZAxis) + " "
+//                    + mLat + " " + mLon + "\r\n");
+            try {
+                mTextWriter.append(String.format("%.5g", mXAxis) + " "
+                        + String.format("%.5g", mYAxis) + " " + String.format("%.5g", mZAxis) + " "
+                        + mLat + " " + mLon + "\r\n");
+                mTextWriter.flush();
+            } catch (IOException e) {
+                Toast toast = Toast.makeText(getActivity().getApplicationContext(),
+                        e.toString(),
+                        Toast.LENGTH_SHORT);
+                toast.show();
+            }
             mCount++;
             //Check to see if we need to turn off the logging
-            if (mCount==NUMSAMPLES) {
+            if (mCount==NUM_SAMPLES) {
                 stopTakingData();
             }
         }
