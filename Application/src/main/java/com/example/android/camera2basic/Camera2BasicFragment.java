@@ -519,7 +519,6 @@ public class Camera2BasicFragment extends Fragment
     public void onPause() {
         closeCamera();
         stopBackgroundThread();
-        stopTakingData();
         super.onPause();
     }
 

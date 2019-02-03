@@ -1,5 +1,5 @@
 #Internal package file, do not edit.
-#Sun Feb 03 18:39:29 EST 2019
+#Sun Feb 03 18:42:07 EST 2019
 1.base=/home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/build/intermediates/dex/debug/mergeProjectDexDebug/out
 0.baseType=DIRECTORY
 1.baseType=DIRECTORY
