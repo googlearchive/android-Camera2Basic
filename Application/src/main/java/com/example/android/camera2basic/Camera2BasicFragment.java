@@ -48,10 +48,13 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.media.Image;
 import android.media.ImageReader;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.os.Vibrator;
+import android.os.VibrationEffect;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
@@ -895,41 +898,14 @@ public class Camera2BasicFragment extends Fragment
                     Toast.LENGTH_SHORT);
             toast.show();
         }
-//        writeTextFile();
+        Vibrator vibe = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) { //new version (api 26+)
+            vibe.vibrate(VibrationEffect.createOneShot(2000, VibrationEffect.DEFAULT_AMPLITUDE));
+        } else {
+            //for api below 26
+            vibe.vibrate(2000);
+        }
     }
-
-//    private void writeTextFile() {
-//
-//        byte[] textData = mTextData.toString().getBytes();
-//        try {
-//            FileOutputStream stream = new FileOutputStream(textFile);
-//            try {
-//                stream.write(textData);
-//                Toast toast = Toast.makeText(getActivity().getApplicationContext(),
-//                        mTextData.toString(),
-//                        Toast.LENGTH_SHORT);
-//                toast.show();
-//            } finally {
-//                stream.close();
-//            }
-//        }catch(FileNotFoundException e) {
-//            Toast toast = Toast.makeText(getActivity().getApplicationContext(),
-//                    e.toString(),
-//                    Toast.LENGTH_SHORT);
-//
-//            toast.show();
-//            Log.d("DataCapture", "failed to create directory");
-//        }
-//        catch (Exception e){
-//            Toast toast = Toast.makeText(getActivity().getApplicationContext(),
-//                    e.toString(),
-//                    Toast.LENGTH_SHORT);
-//
-//            toast.show();
-//            Log.d("DataCapture", "ERROR: I/O?");
-//        }
-//        mTextData = new StringBuilder();
-//    }
 
     /**
      * Lock the focus as the first step for a still image capture.
