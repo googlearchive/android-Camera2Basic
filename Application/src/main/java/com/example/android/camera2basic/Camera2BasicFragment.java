@@ -100,7 +100,7 @@ public class Camera2BasicFragment extends Fragment
     private static final int REQUEST_LOCATION_PERMISSION = 1;
     private static final String FRAGMENT_DIALOG = "dialog";
     private static final int NUM_SAMPLES = 10;
-    private static final int DELAY_TIME = 10;    // in seconds
+    private static final int DELAY_TIME = 0;    // in seconds
     private static final int DELAY_TIME_BETWEEN_PICS = 10; //in seconds
     private static final long EXPOSURE_TIME = 1; // in seconds
 
@@ -309,7 +309,20 @@ public class Camera2BasicFragment extends Fragment
 
         @Override
         public void onImageAvailable(ImageReader reader) {
-            mBackgroundHandler.post(new ImageSaver(reader.acquireNextImage(), mFile,mCharacteristics,mCaptureResult));
+//            File thisFile = new File(mFile.toString());
+            if (mPhotoCount < mNumCaptures) {
+                final Image image = reader.acquireNextImage();
+//                mBackgroundHandler.post(new ImageSaver(image, mFile, mCharacteristics, mCaptureResult));
+                mBackgroundHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mImageArray.add(image);
+                    }
+                });
+                showToast(mCharacteristics.get(CameraCharacteristics.SENSOR_INFO_COLOR_FILTER_ARRANGEMENT).toString());
+                mPhotoCount++;
+                setNextPictureName();
+            }
         }
 
     };
@@ -328,6 +341,11 @@ public class Camera2BasicFragment extends Fragment
      * CaptureResult needed for storing raw?
      */
     private CaptureResult mCaptureResult;
+
+    /**
+     * Array to dump a bunch of images into as they come.
+     */
+    private ArrayList<Image> mImageArray;
 
     /**
      * The current state of camera state for taking pictures.
@@ -380,6 +398,10 @@ public class Camera2BasicFragment extends Fragment
      * variable to store the lat and lon
      */
     private double mLat, mLon;
+
+    private int mPhotoCount;
+
+    private int mSavedCount;
 
     /**
      * A {@link CameraCaptureSession.CaptureCallback} that handles events related to JPEG capture.
@@ -633,7 +655,7 @@ public class Camera2BasicFragment extends Fragment
                         Arrays.asList(map.getOutputSizes(ImageFormat.RAW_SENSOR)),
                         new CompareSizesByArea());
                 mImageReader = ImageReader.newInstance(largest.getWidth(), largest.getHeight(),
-                        ImageFormat.RAW_SENSOR, /*maxImages*/mNumCaptures+1);
+                        ImageFormat.RAW_SENSOR, /*maxImages*/mNumCaptures+3);
                 mImageReader.setOnImageAvailableListener(
                         mOnImageAvailableListener, mBackgroundHandler);
 
@@ -1006,14 +1028,26 @@ public class Camera2BasicFragment extends Fragment
                 public void onCaptureCompleted(@NonNull CameraCaptureSession session,
                                                @NonNull CaptureRequest request,
                                                @NonNull TotalCaptureResult result) {
-                    showToast("Saved: " + mFile);
-                    Log.d(TAG, mFile.toString());
-                    unlockFocus();
+                    mSavedCount++;
+
+                    // After all the images have been taken, do this:
+                    if (mSavedCount==mNumCaptures) {
+                        takeData();
+                        unlockFocus();
+                        addImages();
+                        closeImages();
+                        saveImage();
+
+                    }
                 }
             };
+            List<CaptureRequest> CaptureList = new ArrayList<>();
+            for (int i=0; i<mNumCaptures; i++) {
+                CaptureList.add(captureBuilder.build());
+            }
             mCaptureSession.stopRepeating();
             mCaptureSession.abortCaptures();
-            mCaptureSession.capture(captureBuilder.build(), CaptureCallback, null);
+            mCaptureSession.captureBurst(CaptureList, CaptureCallback, null);
         } catch (CameraAccessException e) {
             e.printStackTrace();
         }
@@ -1055,11 +1089,36 @@ public class Camera2BasicFragment extends Fragment
         mCameraLocked = false;
     }
 
+    /**
+     * This method adds up the images in the mImageArray
+     */
+    private void addImages() {
+//        Image mFinalImage = new ;
+//        for (Image image : mImageArray) {
+//            for (i=0; i plane : image.getPlanes())
+//        }
+    }
+    private void closeImages() {
+        for (Image image : mImageArray) {
+            image.close();
+        }
+    }
+
+    /**
+     * This method saves the image to a png file
+     */
+    private void saveImage() {
+
+    }
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.picture: {
                 setOutputNames();
+                mPhotoCount=0;
+                mSavedCount=0;
+                mImageArray = new ArrayList<Image>();
                 Handler timerHandler = new Handler();
                 timerHandler.postDelayed(new Runnable() {
                     @Override
@@ -1067,21 +1126,6 @@ public class Camera2BasicFragment extends Fragment
                         takePicture();
                     }
                 },DELAY_TIME*1000);
-                for (int i=1; i<mNumCaptures; i++) {
-                    timerHandler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            setNextPictureName();
-                            takePicture();
-                        }
-                    }, DELAY_TIME*1000 + i * DELAY_TIME_BETWEEN_PICS * 1000);
-                }
-                timerHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        takeData();
-                    }
-                },DELAY_TIME*1000 + mNumCaptures*DELAY_TIME_BETWEEN_PICS*1000);
                 break;
             }
             case R.id.info: {
@@ -1116,7 +1160,7 @@ public class Camera2BasicFragment extends Fragment
     private void setCaptureParameters(CaptureRequest.Builder requestBuilder) {
         requestBuilder.set(CaptureRequest.CONTROL_MODE,CaptureRequest.CONTROL_MODE_OFF);
         requestBuilder.set(CaptureRequest.SENSOR_EXPOSURE_TIME,mExposure);
-        requestBuilder.set(CaptureRequest.SENSOR_SENSITIVITY,mSensorMaxSensitivity);
+        requestBuilder.set(CaptureRequest.SENSOR_SENSITIVITY,mSensorMaxSensitivity/8);
         requestBuilder.set(CaptureRequest.LENS_FOCUS_DISTANCE, 0.0f);
         if (mFlashSupported) {
             requestBuilder.set(CaptureRequest.FLASH_MODE, CaptureRequest.FLASH_MODE_OFF);
