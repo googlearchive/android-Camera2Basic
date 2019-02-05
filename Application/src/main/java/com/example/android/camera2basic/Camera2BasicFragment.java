@@ -78,6 +78,7 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.lang.Math;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -99,7 +100,9 @@ public class Camera2BasicFragment extends Fragment
     private static final int REQUEST_LOCATION_PERMISSION = 1;
     private static final String FRAGMENT_DIALOG = "dialog";
     private static final int NUM_SAMPLES = 10;
-    private static final int DELAY_TIME = 10;
+    private static final int DELAY_TIME = 10;    // in seconds
+    private static final int DELAY_TIME_BETWEEN_PICS = 10; //in seconds
+    private static final long EXPOSURE_TIME = 1; // in seconds
 
     private SensorManager mSensorManager;
     private Sensor mAccelerometer;
@@ -198,6 +201,8 @@ public class Camera2BasicFragment extends Fragment
      * The {@link CameraCharacteristics} for the currently configured camera device.
      */
     private CameraCharacteristics mCharacteristics;
+
+    boolean mCameraLocked;
 
     /**
      * An {@link AutoFitTextureView} for camera preview.
@@ -345,6 +350,16 @@ public class Camera2BasicFragment extends Fragment
      * Maximum exposure time of the sensor, in nanoseconds.
      */
     private long mSensorMaxExposure;
+
+    /**
+     * Exposure time chosen for this capture
+     */
+    private long mExposure;
+
+    /**
+     * Number of captures to take to achieve desired exposure time
+     */
+    private int mNumCaptures;
 
     /**
      * Maximum ISO value of the sensor
@@ -601,12 +616,24 @@ public class Camera2BasicFragment extends Fragment
                     continue;
                 }
 
+                // Set the maximum exposure time
+                mSensorMaxExposure = characteristics.get(CameraCharacteristics.SENSOR_INFO_EXPOSURE_TIME_RANGE).getUpper();
+
+                // Determine the number of captures needed
+                mNumCaptures = (int) Math.ceil(EXPOSURE_TIME*1000000000.0/mSensorMaxExposure);
+
+                // Determine the exposure needed for each capture, in nanoseconds
+                mExposure = (long) Math.floor(EXPOSURE_TIME*1000000000.0/mNumCaptures);
+
+                // Set the maximum sensitivity
+                mSensorMaxSensitivity = characteristics.get(CameraCharacteristics.SENSOR_INFO_SENSITIVITY_RANGE).getUpper();
+
                 // For still image captures, we use the largest available size.
                 Size largest = Collections.max(
                         Arrays.asList(map.getOutputSizes(ImageFormat.RAW_SENSOR)),
                         new CompareSizesByArea());
                 mImageReader = ImageReader.newInstance(largest.getWidth(), largest.getHeight(),
-                        ImageFormat.RAW_SENSOR, /*maxImages*/2);
+                        ImageFormat.RAW_SENSOR, /*maxImages*/mNumCaptures+1);
                 mImageReader.setOnImageAvailableListener(
                         mOnImageAvailableListener, mBackgroundHandler);
 
@@ -676,12 +703,6 @@ public class Camera2BasicFragment extends Fragment
                 Boolean available = characteristics.get(CameraCharacteristics.FLASH_INFO_AVAILABLE);
                 mFlashSupported = available == null ? false : available;
 
-                // Set the maximum exposure time
-                mSensorMaxExposure = characteristics.get(CameraCharacteristics.SENSOR_INFO_EXPOSURE_TIME_RANGE).getUpper();
-
-                // Set the maximum sensitivity
-                mSensorMaxSensitivity = characteristics.get(CameraCharacteristics.SENSOR_INFO_SENSITIVITY_RANGE).getUpper();
-
                 mCameraId = cameraId;
                 mCharacteristics = characteristics;
                 return;
@@ -705,6 +726,11 @@ public class Camera2BasicFragment extends Fragment
         if (!mSubDirectory.exists()) {
             mSubDirectory.mkdir();
         }
+        mFile = new File(mSubDirectory, Integer.toString(mTimeTaken)+".dng");
+    }
+
+    private void setNextPictureName() {
+        mTimeTaken++;
         mFile = new File(mSubDirectory, Integer.toString(mTimeTaken)+".dng");
     }
 
@@ -1026,21 +1052,36 @@ public class Camera2BasicFragment extends Fragment
         } catch (CameraAccessException e) {
             e.printStackTrace();
         }
+        mCameraLocked = false;
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.picture: {
+                setOutputNames();
                 Handler timerHandler = new Handler();
                 timerHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        setOutputNames();
                         takePicture();
-                        takeData();
                     }
                 },DELAY_TIME*1000);
+                for (int i=1; i<mNumCaptures; i++) {
+                    timerHandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            setNextPictureName();
+                            takePicture();
+                        }
+                    }, DELAY_TIME*1000 + i * DELAY_TIME_BETWEEN_PICS * 1000);
+                }
+                timerHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        takeData();
+                    }
+                },DELAY_TIME*1000 + mNumCaptures*DELAY_TIME_BETWEEN_PICS*1000);
                 break;
             }
             case R.id.info: {
@@ -1074,7 +1115,7 @@ public class Camera2BasicFragment extends Fragment
 
     private void setCaptureParameters(CaptureRequest.Builder requestBuilder) {
         requestBuilder.set(CaptureRequest.CONTROL_MODE,CaptureRequest.CONTROL_MODE_OFF);
-        requestBuilder.set(CaptureRequest.SENSOR_EXPOSURE_TIME,mSensorMaxExposure);
+        requestBuilder.set(CaptureRequest.SENSOR_EXPOSURE_TIME,mExposure);
         requestBuilder.set(CaptureRequest.SENSOR_SENSITIVITY,mSensorMaxSensitivity);
         requestBuilder.set(CaptureRequest.LENS_FOCUS_DISTANCE, 0.0f);
         if (mFlashSupported) {
