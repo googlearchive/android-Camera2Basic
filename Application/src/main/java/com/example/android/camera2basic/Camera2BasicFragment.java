@@ -24,6 +24,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.ImageFormat;
 import android.graphics.Matrix;
 import android.graphics.Point;
@@ -56,6 +58,8 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Vibrator;
 import android.os.VibrationEffect;
+import android.support.v8.renderscript.RenderScript;
+import android.renderscript.ScriptIntrinsicBlend;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
@@ -88,6 +92,8 @@ import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
+import io.github.silvaren.easyrs.tools.Blend;
+
 public class Camera2BasicFragment extends Fragment
         implements View.OnClickListener, SensorEventListener, LocationListener, ActivityCompat.OnRequestPermissionsResultCallback {
 
@@ -99,20 +105,19 @@ public class Camera2BasicFragment extends Fragment
     private static final int REQUEST_STORAGE_PERMISSION = 1;
     private static final int REQUEST_LOCATION_PERMISSION = 1;
     private static final String FRAGMENT_DIALOG = "dialog";
-    private static final int NUM_SAMPLES = 10;
-    private static final int DELAY_TIME = 0;    // in seconds
-    private static final int DELAY_TIME_BETWEEN_PICS = 10; //in seconds
-    private static final long EXPOSURE_TIME = 1; // in seconds
+    private static final int NUM_SAMPLES = 1000; // Number of accelerometer readings taken
+    private static final int DELAY_TIME = 10;    // in seconds
+    private static final long EXPOSURE_TIME = 2; // in seconds
 
     private SensorManager mSensorManager;
     private Sensor mAccelerometer;
     protected LocationManager mLocationManager;
 
     static {
-        ORIENTATIONS.append(Surface.ROTATION_0, 90);
-        ORIENTATIONS.append(Surface.ROTATION_90, 0);
-        ORIENTATIONS.append(Surface.ROTATION_180, 270);
-        ORIENTATIONS.append(Surface.ROTATION_270, 180);
+        ORIENTATIONS.append(Surface.ROTATION_0, 180);
+        ORIENTATIONS.append(Surface.ROTATION_90, 90);
+        ORIENTATIONS.append(Surface.ROTATION_180, 0);
+        ORIENTATIONS.append(Surface.ROTATION_270, 270);
     }
 
     /**
@@ -312,17 +317,35 @@ public class Camera2BasicFragment extends Fragment
 //            File thisFile = new File(mFile.toString());
             if (mPhotoCount < mNumCaptures) {
                 final Image image = reader.acquireNextImage();
-//                mBackgroundHandler.post(new ImageSaver(image, mFile, mCharacteristics, mCaptureResult));
+//                mBackgroundHandler.post(new ImageSaver(reader.acquireNextImage(), mFile, mCharacteristics, mCaptureResult, getActivity()));
                 mBackgroundHandler.post(new Runnable() {
                     @Override
                     public void run() {
                         mImageArray.add(image);
                     }
                 });
-                showToast(mCharacteristics.get(CameraCharacteristics.SENSOR_INFO_COLOR_FILTER_ARRANGEMENT).toString());
-                mPhotoCount++;
                 setNextPictureName();
+
+                /**
+                 * Uncomment the following to attempt addition
+                 */
+//                Image image = reader.acquireNextImage();
+//                if (mPhotoCount == 0) {
+//                    ByteBuffer buffer = image.getPlanes()[0].getBuffer();
+//                    byte[] bytes = new byte[buffer.capacity()];
+//                    buffer.get(bytes);
+//                    mBitmapSum = BitmapFactory.decodeByteArray(bytes, 0, bytes.length, null);
+//                } else {
+//                    ByteBuffer buffer = image.getPlanes()[0].getBuffer();
+//                    byte[] bytes = new byte[buffer.capacity()];
+//                    buffer.get(bytes);
+//                    Bitmap newBitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length, null);
+//                    Blend.add(mRS, newBitmap, mBitmapSum);
+//                }
+//                image.close();
+
             }
+            mPhotoCount++;
         }
 
     };
@@ -346,6 +369,16 @@ public class Camera2BasicFragment extends Fragment
      * Array to dump a bunch of images into as they come.
      */
     private ArrayList<Image> mImageArray;
+
+    /**
+     * Bitmap to store the sum of all the bitmaps.
+     */
+    private Bitmap mBitmapSum;
+
+    /**
+     * RenderScript object
+     */
+    private RenderScript mRS;
 
     /**
      * The current state of camera state for taking pictures.
@@ -620,6 +653,7 @@ public class Camera2BasicFragment extends Fragment
     @SuppressWarnings("SuspiciousNameCombination")
     private void setUpCameraOutputs(int width, int height) {
         Activity activity = getActivity();
+        mRS = RenderScript.create(getActivity().getApplicationContext());
         CameraManager manager = (CameraManager) activity.getSystemService(Context.CAMERA_SERVICE);
         try {
             for (String cameraId : manager.getCameraIdList()) {
@@ -748,12 +782,12 @@ public class Camera2BasicFragment extends Fragment
         if (!mSubDirectory.exists()) {
             mSubDirectory.mkdir();
         }
-        mFile = new File(mSubDirectory, Integer.toString(mTimeTaken)+".dng");
+        mFile = new File(mSubDirectory, Integer.toString(mTimeTaken)+".png");
     }
 
     private void setNextPictureName() {
         mTimeTaken++;
-        mFile = new File(mSubDirectory, Integer.toString(mTimeTaken)+".dng");
+        mFile = new File(mSubDirectory, Integer.toString(mTimeTaken)+".png");
     }
 
     /**
@@ -1035,8 +1069,8 @@ public class Camera2BasicFragment extends Fragment
                         takeData();
                         unlockFocus();
                         addImages();
-                        closeImages();
-                        saveImage();
+//                        closeImages();
+//                        saveImage();
 
                     }
                 }
@@ -1093,23 +1127,92 @@ public class Camera2BasicFragment extends Fragment
      * This method adds up the images in the mImageArray
      */
     private void addImages() {
-//        Image mFinalImage = new ;
-//        for (Image image : mImageArray) {
-//            for (i=0; i plane : image.getPlanes())
-//        }
+        RenderScript rs = RenderScript.create(getActivity().getApplicationContext());
+        Image firstImage = mImageArray.get(0);
+        int width = firstImage.getWidth();
+        int height = firstImage.getHeight();
+        ByteBuffer buffer = firstImage.getPlanes()[0].getBuffer();
+        byte[] bytes = new byte[buffer.capacity()];
+        buffer.get(bytes);
+        byte[] trunc = truncateBytes(bytes);
+        Bitmap bm = bytesToBitmap(trunc,width,height);
+        for (int i=1;i<mNumCaptures;i++) {
+            Image nextImage = mImageArray.get(i);
+            ByteBuffer newBuffer = nextImage.getPlanes()[0].getBuffer();
+            byte[] newBytes = new byte[newBuffer.capacity()];
+            newBuffer.get(newBytes);
+            byte[] newTrunc = truncateBytes(newBytes);
+            Bitmap bm2 = bytesToBitmap(newTrunc,width,height);
+            Blend.add(rs,bm2,bm);
+            bm2.recycle();
+            nextImage.close();
+        }
+        FileOutputStream output = null;
+        try {
+            output = new FileOutputStream(mFile);
+            bm.compress(Bitmap.CompressFormat.PNG,100, output);
+        } catch (IOException e) {
+            e.printStackTrace();
+
+        } finally {
+            firstImage.close();
+            closeOutput(output);
+        }
+
     }
+
     private void closeImages() {
         for (Image image : mImageArray) {
             image.close();
         }
     }
 
+    private byte[] truncateBytes(byte[] in) {
+        byte upper;
+        byte lower;
+        byte[] out = new byte[in.length/2];
+        for (int i=0; i<out.length; i++ ) {
+
+            upper = (in[2*i]);
+            lower = (in[2*i + 1]);
+            out[i] =(byte) (upper>>3);
+//                if (upper>0) {
+//                    out[i] = (byte) 0xff;
+//                } else {
+//                    out[i] = lower;
+//                }
+        }
+        return out;
+    }
+
+    private Bitmap bytesToBitmap(byte[] in, int width, int height) {
+        byte[] bits = new byte[in.length*4];
+        for (int i=0; i<in.length; i++) {
+            bits[i*4] = bits[i*4+1] = bits[i*4+2] = in[i];
+            bits[i*4+3] = (byte) 0xff; // the alpha.
+        }
+        Log.d("bytesToBitmap",Integer.toString(bits.length));
+
+        Bitmap bm = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        bm.copyPixelsFromBuffer(ByteBuffer.wrap(bits));
+        return bm;
+    }
+
     /**
      * This method saves the image to a png file
      */
     private void saveImage() {
-
+        FileOutputStream output = null;
+        try {
+            output = new FileOutputStream(mFile);
+            mBitmapSum.compress(Bitmap.CompressFormat.PNG,9,output );
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            closeOutput(output);
+        }
     }
+
 
     @Override
     public void onClick(View view) {
@@ -1160,7 +1263,7 @@ public class Camera2BasicFragment extends Fragment
     private void setCaptureParameters(CaptureRequest.Builder requestBuilder) {
         requestBuilder.set(CaptureRequest.CONTROL_MODE,CaptureRequest.CONTROL_MODE_OFF);
         requestBuilder.set(CaptureRequest.SENSOR_EXPOSURE_TIME,mExposure);
-        requestBuilder.set(CaptureRequest.SENSOR_SENSITIVITY,mSensorMaxSensitivity/8);
+        requestBuilder.set(CaptureRequest.SENSOR_SENSITIVITY,mSensorMaxSensitivity);
         requestBuilder.set(CaptureRequest.LENS_FOCUS_DISTANCE, 0.0f);
         if (mFlashSupported) {
             requestBuilder.set(CaptureRequest.FLASH_MODE, CaptureRequest.FLASH_MODE_OFF);
@@ -1260,27 +1363,96 @@ public class Camera2BasicFragment extends Fragment
          */
         private CaptureResult mCaptureResult;
 
+        /**
+         * Activity needed to show toasts
+         */
+        private Activity mActivity;
+
         ImageSaver(Image image, File file, CameraCharacteristics characteristics,
-                   CaptureResult captureResult) {
+                   CaptureResult captureResult, Activity activity) {
             mImage = image;
             mFile = file;
             mCharacteristics = characteristics;
             mCaptureResult = captureResult;
+            mActivity = activity;
         }
+
+//        @Override
+//        public void run() {
+//            DngCreator dngCreator = new DngCreator(mCharacteristics, mCaptureResult);
+//            FileOutputStream output = null;
+//            try {
+//                output = new FileOutputStream(mFile);
+//                dngCreator.writeImage(output, mImage);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            } finally {
+//                mImage.close();
+//                closeOutput(output);
+//            }
+//        }
 
         @Override
         public void run() {
-            DngCreator dngCreator = new DngCreator(mCharacteristics, mCaptureResult);
             FileOutputStream output = null;
+            int height = mImage.getHeight();
+            int width = mImage.getWidth();
+
+            ByteBuffer buffer = mImage.getPlanes()[0].getBuffer();
+            byte[] bytes = new byte[buffer.capacity()];
+            buffer.get(bytes);
+            Log.d("original byte[] size:",Integer.toString(bytes.length));
+            byte[] truncatedBytes = truncateBytes(bytes);
+            Log.d("truncated byte[] size:",Integer.toString(truncatedBytes.length));
+
+            Bitmap bm = bytesToBitmap(truncatedBytes,width, height);
+
+
+//            Bitmap bitmap = Bitmap.createBitmap(bytes, 0, bytes.length, null);
             try {
                 output = new FileOutputStream(mFile);
-                dngCreator.writeImage(output, mImage);
+                bm.compress(Bitmap.CompressFormat.PNG,100, output);
             } catch (IOException e) {
                 e.printStackTrace();
+
             } finally {
                 mImage.close();
                 closeOutput(output);
             }
+        }
+
+        /**
+         * This method takes in an array of bytes, representing shorts
+         */
+        private byte[] truncateBytes(byte[] in) {
+            byte upper;
+            byte lower;
+            byte[] out = new byte[in.length/2];
+            for (int i=0; i<out.length; i++ ) {
+
+                upper = (in[2*i]);
+                lower = (in[2*i + 1]);
+                out[i] =(byte) (upper>>3);
+//                if (upper>0) {
+//                    out[i] = (byte) 0xff;
+//                } else {
+//                    out[i] = lower;
+//                }
+            }
+            return out;
+        }
+
+        private Bitmap bytesToBitmap(byte[] in, int width, int height) {
+            byte[] bits = new byte[in.length*4];
+            for (int i=0; i<in.length; i++) {
+                bits[i*4] = bits[i*4+1] = bits[i*4+2] = in[i];
+                bits[i*4+3] = (byte) 0xff; // the alpha.
+            }
+            Log.d("bytesToBitmap",Integer.toString(bits.length));
+
+            Bitmap bm = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+            bm.copyPixelsFromBuffer(ByteBuffer.wrap(bits));
+            return bm;
         }
 
     }

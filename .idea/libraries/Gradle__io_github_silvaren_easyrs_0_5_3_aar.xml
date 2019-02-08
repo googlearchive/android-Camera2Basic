@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: io.github.silvaren:easyrs:0.5.3@aar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/easyrs-0.5.3.aar/d1eadd96a98edccfb13da3345ee23992/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/easyrs-0.5.3.aar/d1eadd96a98edccfb13da3345ee23992/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.github.silvaren/easyrs/0.5.3/3beae823e4004d2dace82b5868d95a68fee9f425/easyrs-0.5.3-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
