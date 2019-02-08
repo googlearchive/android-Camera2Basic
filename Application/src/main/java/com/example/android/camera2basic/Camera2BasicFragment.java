@@ -324,26 +324,6 @@ public class Camera2BasicFragment extends Fragment
                         mImageArray.add(image);
                     }
                 });
-                setNextPictureName();
-
-                /**
-                 * Uncomment the following to attempt addition
-                 */
-//                Image image = reader.acquireNextImage();
-//                if (mPhotoCount == 0) {
-//                    ByteBuffer buffer = image.getPlanes()[0].getBuffer();
-//                    byte[] bytes = new byte[buffer.capacity()];
-//                    buffer.get(bytes);
-//                    mBitmapSum = BitmapFactory.decodeByteArray(bytes, 0, bytes.length, null);
-//                } else {
-//                    ByteBuffer buffer = image.getPlanes()[0].getBuffer();
-//                    byte[] bytes = new byte[buffer.capacity()];
-//                    buffer.get(bytes);
-//                    Bitmap newBitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length, null);
-//                    Blend.add(mRS, newBitmap, mBitmapSum);
-//                }
-//                image.close();
-
             }
             mPhotoCount++;
         }
@@ -1066,7 +1046,7 @@ public class Camera2BasicFragment extends Fragment
 
                     // After all the images have been taken, do this:
                     if (mSavedCount==mNumCaptures) {
-                        takeData();
+//                        takeData();
                         unlockFocus();
                         addImages();
 //                        closeImages();
@@ -1158,6 +1138,7 @@ public class Camera2BasicFragment extends Fragment
             firstImage.close();
             closeOutput(output);
         }
+        takeData();
 
     }
 
@@ -1175,7 +1156,7 @@ public class Camera2BasicFragment extends Fragment
 
             upper = (in[2*i]);
             lower = (in[2*i + 1]);
-            out[i] =(byte) (upper>>3);
+            out[i] =(byte) (upper>>3); //Maybe need to play with this???
 //                if (upper>0) {
 //                    out[i] = (byte) 0xff;
 //                } else {

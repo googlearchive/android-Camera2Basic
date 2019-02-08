@@ -5,24 +5,24 @@
     build-mode="COLD"
     density="xxhdpi"
     format="10"
-    ir-eligibility="FIELD_REMOVED"
+    ir-eligibility="SYNTHETIC_CONSTRUCTOR_CHANGE"
     plugin-version="3.3.0"
-    timestamp="1549605375965"
+    timestamp="1549607357746"
     token="-6802486438079572675"
     verifier="COLD_SWAP_REQUESTED" >
 
     <task
         name="javac"
-        duration="275" />
+        duration="201" />
     <task
         name="instant-run-dex"
         duration="0" />
     <task
         name="instant-run-transform"
-        duration="94" />
+        duration="48" />
     <task
         name="verifier"
-        duration="11" />
+        duration="10" />
 
     <artifact
         location="/home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/build/intermediates/split-apk/debug/slices/slice_4.apk"
@@ -74,8 +74,8 @@
     </build>
     <build
         build-mode="COLD"
-        ir-eligibility="FIELD_REMOVED"
-        timestamp="1549605375965"
+        ir-eligibility="SYNTHETIC_CONSTRUCTOR_CHANGE"
+        timestamp="1549607357746"
         verifier="COLD_SWAP_REQUESTED" >
         <artifact
             location="/home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/build/intermediates/split-apk/debug/slices/slice_4.apk"

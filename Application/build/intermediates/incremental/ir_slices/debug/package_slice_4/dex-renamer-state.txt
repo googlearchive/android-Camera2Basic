@@ -1,4 +1,4 @@
-#Fri Feb 08 00:56:17 EST 2019
+#Fri Feb 08 01:29:18 EST 2019
 base.0=/home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/build/intermediates/transforms/dexMerger/debug/4
 path.0=classes.dex
 renamed.0=classes.dex
