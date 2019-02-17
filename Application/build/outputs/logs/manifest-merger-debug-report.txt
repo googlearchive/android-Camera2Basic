@@ -1,6 +1,6 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml:18:1-44:12
+ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-DataCapture/Application/src/main/AndroidManifest.xml:18:1-44:12
 MERGED from [com.android.support:support-v13:27.0.2] /home/ethan/.gradle/caches/transforms-1/files-1.1/support-v13-27.0.2.aar/80093bac1b6bc96e69e09683b1728438/AndroidManifest.xml:17:1-22:12
 MERGED from [com.android.support:support-v4:27.0.2] /home/ethan/.gradle/caches/transforms-1/files-1.1/support-v4-27.0.2.aar/75af8ef23d2001b2a1bd6fe458820ff1/AndroidManifest.xml:17:1-22:12
 MERGED from [com.android.support:cardview-v7:27.0.2] /home/ethan/.gradle/caches/transforms-1/files-1.1/cardview-v7-27.0.2.aar/9b07a21d1868455f53e92c670b8a171a/AndroidManifest.xml:17:1-22:12
@@ -15,71 +15,71 @@ MERGED from [com.android.support:support-vector-drawable:27.0.2] /home/ethan/.gr
 MERGED from [com.android.support:support-compat:27.0.2] /home/ethan/.gradle/caches/transforms-1/files-1.1/support-compat-27.0.2.aar/5a9a28ff8a371e0b85922dadf42ceac3/AndroidManifest.xml:17:1-22:12
 MERGED from [android.arch.lifecycle:runtime:1.0.3] /home/ethan/.gradle/caches/transforms-1/files-1.1/runtime-1.0.3.aar/8b5d7d734e7cad02b56b3f32246047cb/AndroidManifest.xml:17:1-24:12
 	package
-		ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml:19:5-47
+		ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-DataCapture/Application/src/main/AndroidManifest.xml:19:5-47
 	xmlns:android
-		ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml:18:11-69
+		ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-DataCapture/Application/src/main/AndroidManifest.xml:18:11-69
 uses-permission#android.permission.CAMERA
-ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml:21:5-65
+ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-DataCapture/Application/src/main/AndroidManifest.xml:21:5-65
 	android:name
-		ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml:21:22-62
+		ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-DataCapture/Application/src/main/AndroidManifest.xml:21:22-62
 uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
-ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml:22:5-81
+ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-DataCapture/Application/src/main/AndroidManifest.xml:22:5-81
 	android:name
-		ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml:22:22-78
+		ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-DataCapture/Application/src/main/AndroidManifest.xml:22:22-78
 uses-permission#android.permission.ACCESS_FINE_LOCATION
-ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml:23:5-79
+ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-DataCapture/Application/src/main/AndroidManifest.xml:23:5-79
 	android:name
-		ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml:23:22-76
+		ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-DataCapture/Application/src/main/AndroidManifest.xml:23:22-76
 uses-permission#android.permission.ACCESS_COARSE_LOCATION
-ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml:24:5-81
+ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-DataCapture/Application/src/main/AndroidManifest.xml:24:5-81
 	android:name
-		ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml:24:22-78
+		ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-DataCapture/Application/src/main/AndroidManifest.xml:24:22-78
 uses-permission#android.permission.VIBRATE
-ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml:25:5-66
+ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-DataCapture/Application/src/main/AndroidManifest.xml:25:5-66
 	android:name
-		ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml:25:22-63
+		ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-DataCapture/Application/src/main/AndroidManifest.xml:25:22-63
 uses-feature#android.hardware.camera
-ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml:27:5-60
+ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-DataCapture/Application/src/main/AndroidManifest.xml:27:5-60
 	android:name
-		ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml:27:19-57
+		ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-DataCapture/Application/src/main/AndroidManifest.xml:27:19-57
 uses-feature#android.hardware.camera.autofocus
-ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml:28:5-70
+ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-DataCapture/Application/src/main/AndroidManifest.xml:28:5-70
 	android:name
-		ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml:28:19-67
+		ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-DataCapture/Application/src/main/AndroidManifest.xml:28:19-67
 application
-ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml:30:5-42:19
+ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-DataCapture/Application/src/main/AndroidManifest.xml:30:5-42:19
 MERGED from [io.github.silvaren:easyrs:0.5.3] /home/ethan/.gradle/caches/transforms-1/files-1.1/easyrs-0.5.3.aar/d1eadd96a98edccfb13da3345ee23992/AndroidManifest.xml:11:5-15:19
 MERGED from [io.github.silvaren:easyrs:0.5.3] /home/ethan/.gradle/caches/transforms-1/files-1.1/easyrs-0.5.3.aar/d1eadd96a98edccfb13da3345ee23992/AndroidManifest.xml:11:5-15:19
 	android:supportsRtl
 		ADDED from [io.github.silvaren:easyrs:0.5.3] /home/ethan/.gradle/caches/transforms-1/files-1.1/easyrs-0.5.3.aar/d1eadd96a98edccfb13da3345ee23992/AndroidManifest.xml:14:9-35
 	android:label
-		ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml:31:9-41
+		ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-DataCapture/Application/src/main/AndroidManifest.xml:31:9-41
 	android:icon
-		ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml:32:9-45
+		ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-DataCapture/Application/src/main/AndroidManifest.xml:32:9-45
 	android:allowBackup
-		ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml:30:18-44
+		ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-DataCapture/Application/src/main/AndroidManifest.xml:30:18-44
 	android:theme
-		ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml:33:9-45
+		ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-DataCapture/Application/src/main/AndroidManifest.xml:33:9-45
 activity#com.example.android.camera2basic.CameraActivity
-ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml:35:9-41:20
+ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-DataCapture/Application/src/main/AndroidManifest.xml:35:9-41:20
 	android:label
-		ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml:36:19-51
+		ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-DataCapture/Application/src/main/AndroidManifest.xml:36:19-51
 	android:name
-		ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml:35:19-49
+		ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-DataCapture/Application/src/main/AndroidManifest.xml:35:19-49
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
-ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml:37:13-40:29
+ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-DataCapture/Application/src/main/AndroidManifest.xml:37:13-40:29
 action#android.intent.action.MAIN
-ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml:38:17-69
+ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-DataCapture/Application/src/main/AndroidManifest.xml:38:17-69
 	android:name
-		ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml:38:25-66
+		ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-DataCapture/Application/src/main/AndroidManifest.xml:38:25-66
 category#android.intent.category.LAUNCHER
-ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml:39:17-77
+ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-DataCapture/Application/src/main/AndroidManifest.xml:39:17-77
 	android:name
-		ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml:39:27-74
+		ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-DataCapture/Application/src/main/AndroidManifest.xml:39:27-74
 uses-sdk
-INJECTED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml reason: use-sdk injection requested
-INJECTED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml
-INJECTED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml
+INJECTED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-DataCapture/Application/src/main/AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-DataCapture/Application/src/main/AndroidManifest.xml
+INJECTED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-DataCapture/Application/src/main/AndroidManifest.xml
 MERGED from [com.android.support:support-v13:27.0.2] /home/ethan/.gradle/caches/transforms-1/files-1.1/support-v13-27.0.2.aar/80093bac1b6bc96e69e09683b1728438/AndroidManifest.xml:20:5-44
 MERGED from [com.android.support:support-v13:27.0.2] /home/ethan/.gradle/caches/transforms-1/files-1.1/support-v13-27.0.2.aar/80093bac1b6bc96e69e09683b1728438/AndroidManifest.xml:20:5-44
 MERGED from [com.android.support:support-v4:27.0.2] /home/ethan/.gradle/caches/transforms-1/files-1.1/support-v4-27.0.2.aar/75af8ef23d2001b2a1bd6fe458820ff1/AndroidManifest.xml:20:5-44
@@ -106,13 +106,13 @@ MERGED from [com.android.support:support-compat:27.0.2] /home/ethan/.gradle/cach
 MERGED from [com.android.support:support-compat:27.0.2] /home/ethan/.gradle/caches/transforms-1/files-1.1/support-compat-27.0.2.aar/5a9a28ff8a371e0b85922dadf42ceac3/AndroidManifest.xml:20:5-44
 MERGED from [android.arch.lifecycle:runtime:1.0.3] /home/ethan/.gradle/caches/transforms-1/files-1.1/runtime-1.0.3.aar/8b5d7d734e7cad02b56b3f32246047cb/AndroidManifest.xml:20:5-22:41
 MERGED from [android.arch.lifecycle:runtime:1.0.3] /home/ethan/.gradle/caches/transforms-1/files-1.1/runtime-1.0.3.aar/8b5d7d734e7cad02b56b3f32246047cb/AndroidManifest.xml:20:5-22:41
-INJECTED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml
-INJECTED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml
+INJECTED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-DataCapture/Application/src/main/AndroidManifest.xml
+INJECTED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-DataCapture/Application/src/main/AndroidManifest.xml
 	android:targetSdkVersion
-		INJECTED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml
-		ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml
-		INJECTED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml
+		INJECTED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-DataCapture/Application/src/main/AndroidManifest.xml
+		ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-DataCapture/Application/src/main/AndroidManifest.xml
+		INJECTED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-DataCapture/Application/src/main/AndroidManifest.xml
 	android:minSdkVersion
-		INJECTED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml
-		ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml
-		INJECTED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/src/main/AndroidManifest.xml
+		INJECTED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-DataCapture/Application/src/main/AndroidManifest.xml
+		ADDED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-DataCapture/Application/src/main/AndroidManifest.xml
+		INJECTED from /home/ethan/Documents/School/ECE460/CelestialNavigation/android-DataCapture/Application/src/main/AndroidManifest.xml

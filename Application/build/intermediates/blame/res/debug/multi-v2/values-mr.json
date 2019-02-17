@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "/home/ethan/Documents/School/ECE460/CelestialNavigation/android-Camera2Basic/Application/build/intermediates/incremental/mergeDebugResources/merged.dir/values-mr/values-mr.xml",
+            "outputFile": "/home/ethan/Documents/School/ECE460/CelestialNavigation/android-DataCapture/Application/build/intermediates/incremental/mergeDebugResources/merged.dir/values-mr/values-mr.xml",
             "map": [
                 {
                     "source": "/home/ethan/.gradle/caches/transforms-1/files-1.1/appcompat-v7-27.0.2.aar/d869a16fba16a7c41ca094e94693effe/res/values-mr/values-mr.xml",
