@@ -235,7 +235,7 @@ public class Camera2BasicFragment extends Fragment
     private File mFile;
 
     /**
-     * This a callback object for the {@link ImageReader}. "onImageAvailable" will be called when a
+     * This is a callback object for the {@link ImageReader}. "onImageAvailable" will be called when a
      * still image is ready to be saved.
      */
     private final ImageReader.OnImageAvailableListener mOnImageAvailableListener

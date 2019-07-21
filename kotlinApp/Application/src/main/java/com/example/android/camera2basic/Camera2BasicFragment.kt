@@ -150,7 +150,7 @@ class Camera2BasicFragment : Fragment(), View.OnClickListener,
     private lateinit var file: File
 
     /**
-     * This a callback object for the [ImageReader]. "onImageAvailable" will be called when a
+     * This is a callback object for the [ImageReader]. "onImageAvailable" will be called when a
      * still image is ready to be saved.
      */
     private val onImageAvailableListener = ImageReader.OnImageAvailableListener {
